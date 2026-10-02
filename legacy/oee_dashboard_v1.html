@@ -1,0 +1,3376 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OEE Smart Monitoring — FKS Food Lini Packaging (Real Data Juni 2026)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F7F5EF;
+            --card: #FFFFFF;
+            --border: #E5E1D5;
+            --text: #2B2D31;
+            --text-secondary: #555963;
+            --text-muted: #8E929B;
+            --accent: #E5A91A;
+            --accent-dark: #C58F10;
+            --accent-light: #FFF9EA;
+            --brand-dark: #33373E;
+            --green: #10B981;
+            --green-bg: #ECFDF5;
+            --amber: #E5A91A;
+            --amber-bg: #FFFBEB;
+            --red: #EF4444;
+            --red-bg: #FEF2F2;
+            --radius: 12px;
+            --shadow: 0 2px 5px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px 28px 60px;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 16px;
+            background: var(--card);
+            padding: 14px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--accent);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .fks-logo-box {
+            display: flex;
+            align-items: center;
+            background: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        }
+
+        .header-titles h1 {
+            font-size: 19px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.02em;
+            color: var(--brand-dark);
+        }
+
+        .header-titles p {
+            margin: 3px 0 0;
+            color: var(--text-secondary);
+            font-size: 12.5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            background: #EDE9DD;
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn.active {
+            background: var(--card);
+            color: var(--brand-dark);
+            border-bottom: 2px solid var(--accent);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-btn:hover:not(.active) {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .export-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            background: var(--accent-light);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(229, 169, 26, 0.4);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 3px rgba(229, 169, 26, 0.3);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(229, 169, 26, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(229, 169, 26, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(229, 169, 26, 0);
+            }
+        }
+
+        .clock-box {
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-secondary);
+            background: #FAF8F3;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            letter-spacing: 0.02em;
+        }
+
+        /* Data Source Sub-header */
+        .datasource-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: #EFECE3;
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .datasource-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--brand-dark);
+        }
+
+        .datasource-file {
+            background: #FFFFFF;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--accent-dark);
+        }
+
+        /* Page Sections */
+        .tab-page {
+            display: none;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .tab-page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Common Layout Elements */
+        .grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--brand-dark);
+            margin: 0;
+        }
+
+        /* Toolbar Controls (Packaging Page) */
+        .toolbar-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: linear-gradient(135deg, #33373E 0%, #1F2227 100%);
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            border-left: 5px solid var(--accent);
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-left select {
+            background: #424750;
+            color: #fff;
+            border: 1px solid #575D68;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .line-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .line-status-pill.running {
+            background: rgba(229, 169, 26, 0.25);
+            color: #FCD34D;
+            border: 1px solid rgba(229, 169, 26, 0.4);
+        }
+
+        .line-status-pill.breakdown {
+            background: rgba(239, 68, 68, 0.25);
+            color: #F87171;
+            border: 1px solid rgba(248, 113, 113, 0.4);
+        }
+
+        .line-status-pill.paused {
+            background: rgba(245, 158, 11, 0.25);
+            color: #FBBF24;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #1F2227;
+        }
+
+        .btn-primary:hover {
+            background: #D29813;
+        }
+
+        .btn-warning {
+            background: #D97706;
+            color: #fff;
+        }
+
+        .btn-warning:hover {
+            background: #B45309;
+        }
+
+        .btn-danger {
+            background: #DC2626;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #B91C1C;
+        }
+
+        .btn-dark {
+            background: #424750;
+            color: #F8FAFC;
+            border: 1px solid #575D68;
+        }
+
+        .btn-dark:hover {
+            background: #575D68;
+        }
+
+        .speed-slider-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .speed-slider-wrap input[type=range] {
+            width: 100px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* KPI Grid */
+        .kpi-row {
+            grid-template-columns: repeat(4, 1fr) 1.2fr;
+        }
+
+        .kpi-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .kpi-gauge {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+        }
+
+        .kpi-gauge canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .kpi-value {
+            font-size: 26px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            margin: 2px 0 0;
+            letter-spacing: -0.01em;
+            color: var(--brand-dark);
+        }
+
+        .kpi-delta {
+            font-size: 12px;
+            margin-top: 4px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kpi-delta.up {
+            color: var(--green);
+        }
+
+        .kpi-delta.down {
+            color: var(--red);
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .info-row .label {
+            color: var(--text-secondary);
+        }
+
+        .info-row .value {
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-variant-numeric: tabular-nums;
+            color: var(--brand-dark);
+        }
+
+        /* Station Grid */
+        .station-grid {
+            grid-template-columns: repeat(6, 1fr);
+        }
+
+        .station-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .station-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+        }
+
+        .station-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent);
+        }
+
+        .station-card.warning::before {
+            background: var(--amber);
+        }
+
+        .station-card.error::before {
+            background: var(--red);
+        }
+
+        .station-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .station-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--brand-dark);
+        }
+
+        .station-badge {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-ok {
+            background: var(--amber-bg);
+            color: #B47B08;
+        }
+
+        .badge-warn {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .badge-err {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .station-metric {
+            margin-top: 6px;
+        }
+
+        .station-val {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .station-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Charts & Live Log Rows */
+        .chart-row {
+            grid-template-columns: 1.5fr 1fr;
+        }
+
+        .chart-wrap {
+            position: relative;
+            height: 240px;
+        }
+
+        /* Live Log Aktivitas Mesin */
+        .log-box {
+            background: #23272D;
+            color: #E2E8F0;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 12px;
+            height: 220px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border: 1px solid #33373E;
+        }
+
+        .log-entry {
+            display: flex;
+            gap: 10px;
+            line-height: 1.4;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 4px;
+        }
+
+        .log-time {
+            color: #8E929B;
+            flex-shrink: 0;
+        }
+
+        .log-tag {
+            font-weight: 700;
+            flex-shrink: 0;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        .tag-info {
+            color: #FCD34D;
+            background: rgba(252, 211, 77, 0.12);
+        }
+
+        .tag-warn {
+            color: #FBBF24;
+            background: rgba(251, 191, 36, 0.12);
+        }
+
+        .tag-err {
+            color: #F87171;
+            background: rgba(248, 113, 113, 0.12);
+        }
+
+        .tag-success {
+            color: #34D399;
+            background: rgba(52, 211, 153, 0.12);
+        }
+
+        /* Toast Notification */
+        .toast-box {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--brand-dark);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--accent);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 9999;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Tables & Heatmaps (Overview Page) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 6px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 8px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+            font-weight: 600;
+        }
+
+        .num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .bottom-row {
+            grid-template-columns: 1.1fr 0.7fr 1.4fr;
+        }
+
+        .heatmap-table td,
+        .heatmap-table th {
+            text-align: center;
+            padding: 6px 4px;
+        }
+
+        .heat-cell {
+            border-radius: 5px;
+            padding: 5px 0;
+            font-weight: 600;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .target-block {
+            text-align: left;
+            margin-bottom: 14px;
+        }
+
+        .target-block .t-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .target-block .t-value {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 2px 0;
+            color: var(--brand-dark);
+        }
+
+        .gap-red {
+            color: var(--red);
+        }
+
+        .gap-green {
+            color: var(--green);
+        }
+
+        .legend-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .legend-dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 2px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 1200px) {
+            .kpi-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .station-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .chart-row,
+            .bottom-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .station-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .kpi-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =========================================================
+           CLICKABLE KPI CARDS & 9-MACHINE BREAKDOWN STYLES
+           ========================================================= */
+        .clickable-kpi-card {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid var(--border);
+            user-select: none;
+        }
+
+        .clickable-kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border-color: var(--accent);
+        }
+
+        .clickable-kpi-card.active-kpi {
+            border-color: var(--accent) !important;
+            background: linear-gradient(145deg, #FFFFFF 0%, #FFFDF5 100%) !important;
+            box-shadow: 0 0 0 3px rgba(229, 169, 26, 0.3), 0 8px 25px rgba(229, 169, 26, 0.15) !important;
+        }
+
+        .kpi-click-hint {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 2px 7px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .clickable-kpi-card.active-kpi .kpi-click-hint {
+            background: var(--accent-light);
+            color: var(--accent-dark);
+            font-weight: 700;
+        }
+
+        /* Detail Section Container */
+        .detail-section-card {
+            margin-bottom: 20px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .detail-section-header {
+            padding: 16px 20px;
+            background: linear-gradient(90deg, #FAFAFA 0%, #FFFFFF 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .detail-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-title-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--accent-light);
+            color: var(--accent-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(229, 169, 26, 0.2);
+        }
+
+        .filter-pill-group {
+            display: flex;
+            gap: 6px;
+            background: #F1EFEA;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .filter-pill {
+            border: none;
+            background: transparent;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .filter-pill:hover {
+            color: var(--text);
+        }
+
+        .filter-pill.active {
+            background: #FFFFFF;
+            color: var(--brand-dark);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Formula & Explanations */
+        .formula-box {
+            background: linear-gradient(135deg, #1E232A 0%, #2A303C 100%);
+            color: #FFFFFF;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 18px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .formula-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding-bottom: 10px;
+        }
+
+        .formula-equation {
+            font-family: 'Poppins', monospace, sans-serif;
+            font-size: 14.5px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #FCD34D;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 9px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(252, 211, 77, 0.35);
+            display: inline-block;
+        }
+
+        .formula-components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .formula-comp-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 12px;
+        }
+
+        .formula-comp-card .comp-name {
+            font-weight: 700;
+            color: #93C5FD;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .formula-comp-card .comp-desc {
+            color: #D1D5DB;
+            font-size: 11.5px;
+            line-height: 1.4;
+        }
+
+        /* Visualization & Ranking Row */
+        .vis-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 0 20px 18px;
+        }
+
+        .chart-container-card {
+            background: #FAF9F5;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        /* Calculation Data Table */
+        .table-wrap-responsive {
+            overflow-x: auto;
+            padding: 0 20px 20px;
+        }
+
+        .calc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calc-table th {
+            background: #F8F7F2;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 10px 12px;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .calc-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .calc-table tr:hover td {
+            background: #FFFDF7;
+        }
+
+        .calc-table tr.total-row td {
+            background: #F4F2EB;
+            font-weight: 800;
+            border-top: 2px solid var(--border);
+            border-bottom: none;
+            color: var(--brand-dark);
+        }
+
+        .badge-kawasima {
+            background: #FEF3C7;
+            color: #92400E;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            border: 1px solid #FDE68A;
+            display: inline-block;
+        }
+
+        .badge-pm {
+            background: #E0E7FF;
+            color: #3730A3;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            border: 1px solid #C7D2FE;
+            display: inline-block;
+        }
+
+        .mini-progress {
+            width: 100%;
+            height: 6px;
+            background: #E5E7EB;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .mini-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .stat-badge.world-class {
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+
+        .stat-badge.good {
+            background: #FFFBEB;
+            color: #92400E;
+            border: 1px solid #FDE68A;
+        }
+
+        .stat-badge.warning {
+            background: #FEF2F2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        /* =========================================================
+           MODAL ANALISIS METRIK
+           ========================================================= */
+        .metric-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 22, 26, 0.55);
+            backdrop-filter: blur(2px);
+            z-index: 10000;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 32px 16px;
+            overflow-y: auto;
+        }
+
+        .metric-modal-overlay.open {
+            display: flex;
+        }
+
+        .metric-modal {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .metric-modal .detail-section-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .modal-close-btn {
+            border: 1px solid var(--border);
+            background: #FFFFFF;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--red-bg);
+            color: var(--red);
+            border-color: #FECACA;
+        }
+
+        .calc-table tbody tr {
+            cursor: pointer;
+        }
+
+        .calc-table tbody tr.selected-row td {
+            background: var(--accent-light);
+        }
+
+        /* Panel detail perhitungan satu mesin */
+        .machine-detail-panel {
+            margin: 0 20px 18px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            border-radius: 10px;
+            background: #FFFDF7;
+            padding: 16px 18px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .md-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .md-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--brand-dark);
+        }
+
+        .md-sku {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .md-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .md-stat {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        .md-stat .k {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .md-stat .v {
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            color: var(--brand-dark);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .md-steps {
+            background: #1E232A;
+            color: #E2E8F0;
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 12.5px;
+            line-height: 1.8;
+        }
+
+        .md-steps .hl {
+            color: #FCD34D;
+            font-weight: 700;
+        }
+
+        .md-note {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-brand">
+            <!-- FKS Food Vector Logo -->
+            <div class="fks-logo-box">
+                <svg viewBox="0 0 320 110" width="130" height="42" xmlns="http://www.w3.org/2000/svg">
+                    <text x="5" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                        font-weight="900" font-size="64" fill="#3D3D3D" letter-spacing="-1">FKS</text>
+                    <path d="M 175 14 C 245 6, 315 36, 305 72 C 295 102, 205 110, 145 96 C 115 86, 130 24, 175 14 Z"
+                        fill="#E5A91A" />
+                    <text x="165" y="76" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                        font-weight="700" font-size="52" fill="#FFFFFF">Food</text>
+                </svg>
+            </div>
+
+            <div class="header-titles" style="border-left:2px solid var(--border); padding-left:14px;">
+                <h1>OEE Smart Monitoring Dashboard</h1>
+                <p>Sistem Pengawasan Performa &amp; Data Live Mesin Packaging — <b>FKS Food</b></p>
+            </div>
+        </div>
+
+        <!-- Tab Navigasi Halaman -->
+        <div class="nav-tabs">
+            <button class="nav-btn active" id="btnTabOverview" onclick="switchTab('overview')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Ringkasan OEE
+            </button>
+            <button class="nav-btn" id="btnTabPackaging" onclick="switchTab('packaging')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                Detail Lini Packaging <span
+                    style="background:var(--accent); color:#1F2227; font-size:10px; font-weight:800; padding:2px 6px; border-radius:10px;">LIVE</span>
+            </button>
+        </div>
+
+        <div class="header-right">
+            <!-- Tombol Fitur Import & Export -->
+            <div class="export-actions">
+                <label class="btn btn-dark" style="cursor:pointer; opacity:0.5; cursor:not-allowed;"
+                    title="Fitur import dinonaktifkan (mode data dummy)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Import Excel
+                    <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display:none;"
+                        onchange="handleExcelImport(event)">
+                </label>
+                <button class="btn btn-dark" onclick="exportDataCSV()"
+                    title="Download Data OEE Spreadsheet (CSV/Excel)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="8" y1="13" x2="16" y2="13"></line>
+                        <line x1="8" y1="17" x2="16" y2="17"></line>
+                    </svg>
+                    Export CSV
+                </button>
+                <button class="btn btn-primary" onclick="exportDashboardImage()"
+                    title="Download Screenshot HD Gambar Dashboard (PNG)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    Download Gambar
+                </button>
+            </div>
+
+            <div class="live-badge"><span class="live-dot"></span><span id="liveStatusText">FKS Live Monitoring
+                    Aktif</span></div>
+            <div class="clock-box" id="sysClock">--:--:-- WIB</div>
+        </div>
+    </header>
+
+    <!-- Data Source Info Sub-header dengan Filter Tanggal Historis -->
+    <div class="datasource-bar">
+        <div class="datasource-info">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-dark)" stroke-width="2.2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            Sumber Data: <span class="datasource-file" id="activeFileName">Data Dummy — OEE Lini Packaging</span>
+            <span
+                style="font-size:11.5px; color:var(--text-secondary); background:#FFFFFF; padding:3px 8px; border-radius:4px; border:1px solid var(--border);"
+                id="dataStatsBadge">21 Mesin Packaging • Simulasi</span>
+        </div>
+
+        <!-- Filter Tanggal & Shift Historis -->
+        <div class="date-filter-group" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:6px;">
+                <label style="font-size:12px; font-weight:700; color:var(--brand-dark);">📅 PILIH TANGGAL:</label>
+                <input type="date" id="dateFilterInput" value="2026-06-18" min="2026-06-01" max="2026-06-30"
+                    onchange="onDateFilterChange(this.value)"
+                    style="background:#FFFFFF; border:1px solid var(--border); padding:5px 10px; border-radius:6px; font-weight:700; font-size:12.5px; color:var(--brand-dark); outline:none; cursor:pointer;">
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+                <label style="font-size:12px; font-weight:700; color:var(--brand-dark);">🕒 SHIFT:</label>
+                <select id="shiftFilterSelect" onchange="onShiftFilterChange(this.value)"
+                    style="background:#FFFFFF; border:1px solid var(--border); padding:5px 10px; border-radius:6px; font-weight:700; font-size:12.5px; color:var(--brand-dark); outline:none; cursor:pointer;">
+                    <option value="ALL">Semua Shift (1, 2, 3)</option>
+                    <option value="1">Shift 1 (06.30 – 14.30 WIB)</option>
+                    <option value="2">Shift 2 (14.30 – 22.30 WIB)</option>
+                    <option value="3">Shift 3 (22.30 – 06.30 WIB)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-box" id="toastNotice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span id="toastText">File berhasil di-download!</span>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 1: RINGKASAN OEE (OVERVIEW) -->
+    <!-- ========================================================= -->
+    <div id="pageOverview" class="tab-page active">
+        <div class="grid kpi-row" style="margin-bottom:16px;">
+            <div class="card kpi-card clickable-kpi-card" id="ovKpiOee" onclick="selectMetric('oee')"
+                title="Klik untuk melihat OEE 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="gOee"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">OEE Keseluruhan</div>
+                    <div class="kpi-value" id="ovOeeVal">83.8%</div>
+                    <div class="kpi-delta up">▲ Target 85.0% Achieved</div>
+                    <span class="kpi-click-hint">📊 Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card kpi-card clickable-kpi-card" id="ovKpiAvail" onclick="selectMetric('avail')"
+                title="Klik untuk melihat Availability 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="gAvail"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Availability</div>
+                    <div class="kpi-value" id="ovAvailVal">91.5%</div>
+                    <div class="kpi-delta up">▲ Uptime: 418 Min/Shift</div>
+                    <span class="kpi-click-hint">⏱️ Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card kpi-card clickable-kpi-card" id="ovKpiPerf" onclick="selectMetric('perf')"
+                title="Klik untuk melihat Performance 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="gPerf"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Performance</div>
+                    <div class="kpi-value" id="ovPerfVal">91.9%</div>
+                    <div class="kpi-delta up">▲ Speed 115 PPM Rata-rata</div>
+                    <span class="kpi-click-hint">⚡ Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card kpi-card clickable-kpi-card" id="ovKpiQual" onclick="selectMetric('qual')"
+                title="Klik untuk melihat Quality Rate 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="gQual"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Quality Rate</div>
+                    <div class="kpi-value" id="ovQualVal">99.5%</div>
+                    <div class="kpi-delta up">▲ Zero Critical Defect</div>
+                    <span class="kpi-click-hint">✨ Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="info-list">
+                    <div class="info-row"><span class="label">Planned time</span><span class="value"
+                            id="ovPlannedHours">17.280 jam</span></div>
+                    <div class="info-row"><span class="label">Run time</span><span class="value"
+                            id="ovRuntimeHours">15.740 jam</span></div>
+                    <div class="info-row"><span class="label">Good count</span><span class="value"
+                            id="ovGoodCount">1.839.410</span></div>
+                    <div class="info-row"><span class="label">Total count</span><span class="value"
+                            id="ovTotalCount">1.842.520</span></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="grid chart-row" style="margin-bottom:16px;">
+            <div class="card">
+                <div class="card-title">OEE dari waktu ke waktu</div>
+                <div class="legend-row">
+                    <span><span class="legend-dot" style="background:#10B981"></span>OEE</span>
+                    <span><span class="legend-dot" style="background:#E5A91A"></span>Availability</span>
+                    <span><span class="legend-dot" style="background:#33373E"></span>Performance</span>
+                    <span><span class="legend-dot" style="background:#555963"></span>Quality</span>
+                </div>
+                <div class="chart-wrap"><canvas id="lineTime"></canvas></div>
+            </div>
+            <div class="card">
+                <div class="card-title">OEE per bulan (Simulasi)</div>
+                <div class="chart-wrap"><canvas id="barMonth"></canvas></div>
+            </div>
+        </div>
+
+        <div class="grid bottom-row">
+            <div class="card">
+                <div class="card-title">Top losses</div>
+                <table>
+                    <tr>
+                        <th>Kategori losses</th>
+                        <th class="num">Jam hilang</th>
+                        <th class="num">% dari total</th>
+                    </tr>
+                    <tr>
+                        <td>Planned downtime (Sanitasi A001)</td>
+                        <td class="num">540</td>
+                        <td class="num">35,1%</td>
+                    </tr>
+                    <tr>
+                        <td>Ganti Etiket (MP-1)</td>
+                        <td class="num">380</td>
+                        <td class="num">24,7%</td>
+                    </tr>
+                    <tr>
+                        <td>Ganti Markem (MP-2)</td>
+                        <td class="num">260</td>
+                        <td class="num">16,9%</td>
+                    </tr>
+                    <tr>
+                        <td>Potongan tidak stabil (MP-3)</td>
+                        <td class="num">190</td>
+                        <td class="num">12,3%</td>
+                    </tr>
+                    <tr>
+                        <td>Cleaning Ganti Rasa (DP-5)</td>
+                        <td class="num">110</td>
+                        <td class="num">7,1%</td>
+                    </tr>
+                    <tr>
+                        <td>Trial R&amp;D (A002)</td>
+                        <td class="num">60</td>
+                        <td class="num">3,9%</td>
+                    </tr>
+                    <tr>
+                        <td>Total Downtime</td>
+                        <td class="num">1.540</td>
+                        <td class="num">100%</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">OEE target</div>
+                <div class="target-block">
+                    <div class="t-label">Target OEE</div>
+                    <div class="t-value">85,0%</div>
+                </div>
+                <div class="target-block">
+                    <div class="t-label">Gap ke target</div>
+                    <div class="t-value gap-red">-2,6 pp</div>
+                </div>
+                <div class="target-block" style="margin-bottom:0;">
+                    <div class="t-label">Proyeksi OEE (2026)</div>
+                    <div class="t-value gap-green">84,5%</div>
+                    <div class="t-label" style="font-size:11px;">Berdasarkan tren performa Juni 2026</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Heatmap OEE per bulan</div>
+                <table class="heatmap-table" id="heatmapTable"></table>
+                <div class="legend-row" style="margin-top:10px;">
+                    <span><span class="legend-dot" style="background:#EF4444"></span>&lt; 60%</span>
+                    <span><span class="legend-dot" style="background:#F59E0B"></span>60–70%</span>
+                    <span><span class="legend-dot" style="background:#EAB308"></span>70–80%</span>
+                    <span><span class="legend-dot" style="background:#10B981"></span>80–90%</span>
+                    <span><span class="legend-dot" style="background:#059669"></span>&ge; 90%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 2: DETAIL LINI PACKAGING (DATA DUMMY / SIMULASI) -->
+    <!-- ========================================================= -->
+    <div id="pagePackaging" class="tab-page">
+
+        <!-- Toolbar Kontrol Simulasi & Pilih Mesin -->
+        <div class="toolbar-card">
+            <div class="toolbar-left">
+                <label style="font-size:13px; font-weight:700; color:#CBD5E1;">PILIH MESIN PACKAGING (1 - 21):</label>
+                <select id="lineSelect" onchange="onMachineSelectChange()">
+                    <option value="1">Kawasima #1 — Taro Net 17g (Small Pack)</option>
+                    <option value="2">Kawasima #2 — Taro Net 35g (Medium Pack)</option>
+                    <option value="3">PM #1 — Taro Snack 65g (Regular Pack)</option>
+                    <option value="4">PM #2 — Taro 3D 25g (Small Pack)</option>
+                    <option value="5" selected>PM #3 — Taro Net Seaweed (Regular Pack)</option>
+                    <option value="6">PM #4 — Taro Teriyaki 40g (Medium Pack)</option>
+                    <option value="7">PM #5 — Taro Barbeque 40g (Medium Pack)</option>
+                    <option value="8">PM #6 — Taro Jumbo 110g (Jumbo Pack)</option>
+                    <option value="9">PM #7 — Taro Mix Pack 50g (Family Pack)</option>
+                </select>
+                <div class="line-status-pill running" id="statusPill">
+                    <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
+                    <span id="statusPillText">MESIN #3: RUNNING NORMAL</span>
+                </div>
+            </div>
+
+            <div class="toolbar-actions">
+                <div class="speed-input-wrap"
+                    style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.08); padding:6px 14px; border-radius:8px; font-size:12px;">
+                    <span style="color:#CBD5E1; font-weight:600;">Nominal Speed:</span>
+                    <input type="number" id="speedInput" min="1" max="500" value="124"
+                        oninput="updateTargetSpeed(this.value)" onchange="updateTargetSpeed(this.value)"
+                        style="width:75px; background:#424750; color:#FCD34D; border:1px solid #575D68; padding:5px 8px; border-radius:6px; font-weight:800; font-size:14px; text-align:center; outline:none;">
+                    <span style="font-weight:800; color:#FCD34D;">PPM</span>
+                </div>
+                <button class="btn btn-dark" id="btnToggleSim" onclick="toggleSimulation()">⏸ Pause Live</button>
+                <button class="btn btn-primary" onclick="triggerBreakdown()" style="font-weight:800;">⚠️ Simulasi
+                    Breakdown</button>
+                <button class="btn btn-dark" onclick="resetCounters()">🔄 Reset Counter</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Real-Time KPI Gauge Row (Clickable for 9 Machines Breakdown) -->
+        <div class="grid kpi-row" style="margin-bottom:16px;">
+            <div class="card kpi-card clickable-kpi-card" id="cardKpiOee" onclick="selectMetric('oee')"
+                title="Klik untuk melihat OEE 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="pkGOee"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Real-Time OEE</div>
+                    <div class="kpi-value" id="pkOeeVal">85.8%</div>
+                    <div class="kpi-delta up" id="pkOeeDelta">▲ Target 85.0% Achieved</div>
+                    <span class="kpi-click-hint">📊 Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card kpi-card clickable-kpi-card" id="cardKpiAvail" onclick="selectMetric('avail')"
+                title="Klik untuk melihat Availability 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="pkGAvail"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Availability</div>
+                    <div class="kpi-value" id="pkAvailVal">92.1%</div>
+                    <div class="kpi-delta up" id="pkAvailDelta">▲ Uptime: 450 Menit/Shift</div>
+                    <span class="kpi-click-hint">⏱️ Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card kpi-card clickable-kpi-card" id="cardKpiPerf" onclick="selectMetric('perf')"
+                title="Klik untuk melihat Performance 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="pkGPerf"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Performance</div>
+                    <div class="kpi-value" id="pkPerfVal">93.4%</div>
+                    <div class="kpi-delta up" id="pkPerfDelta">▲ Nominal Speed 120 PPM</div>
+                    <span class="kpi-click-hint">⚡ Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card kpi-card clickable-kpi-card" id="cardKpiQual" onclick="selectMetric('qual')"
+                title="Klik untuk melihat Quality Rate 9 Mesin & Tabel Perhitungan">
+                <div class="kpi-gauge"><canvas id="pkGQual"></canvas></div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Quality Rate</div>
+                    <div class="kpi-value" id="pkQualVal">99.8%</div>
+                    <div class="kpi-delta up" id="pkQualDelta">▲ Zero critical defect</div>
+                    <span class="kpi-click-hint">✨ Detail 9 Mesin</span>
+                </div>
+            </div>
+            <div class="card" style="background:linear-gradient(135deg, #33373E, #1F2227); color:#fff; border:none;">
+                <div class="card-title" style="color:#CBD5E1; margin-bottom:10px;">DATA LIVE MESIN #3</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div>
+                        <div style="font-size:11px; color:#94A3B8;">Kecepatan Real</div>
+                        <div style="font-size:20px; font-weight:800; color:#FCD34D;" id="livePpm">124 PPM</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#94A3B8;">Total Output</div>
+                        <div style="font-size:20px; font-weight:800; color:#34D399;" id="liveTotalCount">97.600</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#94A3B8;">Good Product</div>
+                        <div style="font-size:15px; font-weight:700; color:#E2E8F0;" id="liveGoodCount">97.405</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#94A3B8;">Reject / Defect</div>
+                        <div style="font-size:15px; font-weight:700; color:#F87171;" id="liveRejectCount">195 (0.20%)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <!-- Dynamic Live Charts & Log Aktivitas Row -->
+    <div class="grid chart-row">
+        <!-- Real-time Speed & Output Line Chart -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">GRAFIK KECEPATAN MESIN (PPM) &amp; EFISIENSI REAL-TIME</h3>
+                <div class="legend-row" style="margin:0;">
+                    <span><span class="legend-dot" style="background:#10B981"></span>Real-Time OEE (%)</span>
+                    <span><span class="legend-dot" style="background:#E5A91A"></span>Kecepatan Mesin (PPM)</span>
+                </div>
+            </div>
+            <div class="chart-wrap"><canvas id="liveChartStream"></canvas></div>
+        </div>
+
+        <!-- Live Log Console Stream -->
+        <div class="card" style="padding:16px;">
+            <div class="card-header">
+                <h3 class="card-title">LOG AKTIVITAS MESIN LIVE (JUNI 2026)</h3>
+                <span
+                    style="font-size:11px; color:var(--text-secondary); background:#F7F5EF; padding:2px 8px; border-radius:4px;">Auto-scroll</span>
+            </div>
+            <div class="log-box" id="logConsole">
+                <div class="log-entry">
+                    <span class="log-time">[08:00:00]</span>
+                    <span class="log-tag tag-info">SISTEM</span>
+                    <span>Data dummy dimuat. Mesin #3 aktif.</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[08:05:04]</span>
+                    <span class="log-tag tag-success">PACKAGING</span>
+                    <span>Mesin #3 (Produk C) running nominal speed 120 PPM.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- =========================================================
+         MODAL: ANALISIS & PERHITUNGAN PER METRIK (9 MESIN)
+         Muncul saat kartu gauge OEE / Availability / Performance / Quality diklik
+         ========================================================= -->
+    <div class="metric-modal-overlay" id="metricModal" onclick="if (event.target === this) closeMetricModal()">
+        <div class="metric-modal detail-section-card" id="machineBreakdownSection" role="dialog" aria-modal="true"
+            aria-labelledby="detailSectionTitle">
+            <!-- Section Header -->
+            <div class="detail-section-header">
+                <div class="detail-title-group">
+                    <div class="detail-title-icon" id="detailSectionIcon">⚡</div>
+                    <div>
+                        <h3 class="card-title" id="detailSectionTitle" style="font-size:16px; margin-bottom:2px;">
+                            ANALISIS & PERHITUNGAN PERFORMANCE RATE (9 MESIN)
+                        </h3>
+                        <span id="detailSectionSubtitle" style="font-size:12px; color:var(--text-secondary);"></span>
+                    </div>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <div class="filter-pill-group">
+                        <button class="filter-pill active" id="btnFilterAll" onclick="filterMachineGroup('all')">Semua
+                            (9 Mesin)</button>
+                        <button class="filter-pill" id="btnFilterKawasima" onclick="filterMachineGroup('Kawasima')">📦
+                            Kawasima (2)</button>
+                        <button class="filter-pill" id="btnFilterPM" onclick="filterMachineGroup('PM')">⚙️ PM Series
+                            (7)</button>
+                    </div>
+                    <button class="modal-close-btn" onclick="closeMetricModal()" title="Tutup (Esc)"
+                        aria-label="Tutup">✕</button>
+                </div>
+            </div>
+
+            <div class="metric-modal-body">
+                <!-- Formula & Variable Breakdown Box -->
+                <div class="formula-box" id="formulaContainer"></div>
+
+                <!-- Visual Bar Chart Comparison -->
+                <div class="vis-grid">
+                    <div class="chart-container-card">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                            <div style="font-weight:700; font-size:13px; color:var(--brand-dark);" id="chartTitle">
+                                GRAFIK PERBANDINGAN PERFORMANCE RATE SETIAP MESIN (%)
+                            </div>
+                            <div
+                                style="display:flex; gap:12px; font-size:11.5px; color:var(--text-secondary); flex-wrap:wrap;">
+                                <span style="display:inline-flex; align-items:center; gap:4px;"><span
+                                        style="width:10px; height:10px; border-radius:2px; background:#10B981; display:inline-block;"></span>
+                                    Optimal (&ge;90%)</span>
+                                <span style="display:inline-flex; align-items:center; gap:4px;"><span
+                                        style="width:10px; height:10px; border-radius:2px; background:#E5A91A; display:inline-block;"></span>
+                                    Normal (80-89%)</span>
+                                <span style="display:inline-flex; align-items:center; gap:4px;"><span
+                                        style="width:10px; height:10px; border-radius:2px; background:#EF4444; display:inline-block;"></span>
+                                    Underperforming (&lt;80%)</span>
+                            </div>
+                        </div>
+                        <div style="height:260px; position:relative; width:100%;">
+                            <canvas id="machineMetricChart"></canvas>
+                        </div>
+                        <div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+                            💡 Klik batang grafik atau baris tabel untuk melihat detail perhitungan mesin tersebut.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Perhitungan Satu Mesin -->
+                <div id="machineDetailPanel" class="machine-detail-panel" style="display:none;"></div>
+
+                <!-- Calculation Data Table -->
+                <div class="table-wrap-responsive">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                        <div style="font-weight:700; font-size:13px; color:var(--brand-dark);" id="tableTitle">
+                            📊 DATA DASAR & HASIL PERHITUNGAN PERFORMANCE RATE PER MESIN
+                        </div>
+                        <span
+                            style="font-size:11.5px; color:var(--text-secondary); background:#F8F7F2; padding:3px 8px; border-radius:4px; border:1px solid var(--border);">
+                            🔢 Satuan: Menit (Waktu Operasi), PPM (Kecepatan), Pcs (Jumlah Unit)
+                        </span>
+                    </div>
+                    <div id="tableContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Libraries: Chart.js, html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // =========================================================
+        // DATA DUMMY — OEE LINI PACKAGING
+        // =========================================================
+
+        // =========================================================
+        // DATA 9 MESIN PACKAGING (2 KAWASIMA + 7 PM SERIES)
+        // =========================================================
+        const factoryMachines = [
+            {
+                id: 1,
+                code: "KW-01",
+                name: "Kawasima #1",
+                type: "Kawasima",
+                sku: "Taro Net 17g (Small Pack)",
+                status: "RUNNING",
+                plannedTime: 450,
+                downtime: 28,
+                operatingTime: 422,
+                idealSpeed: 140,
+                actualSpeed: 132,
+                targetOutput: 59080,
+                actualOutput: 55700,
+                goodOutput: 55420,
+                rejectOutput: 280,
+                avail: 93.8,
+                perf: 94.3,
+                qual: 99.5,
+                oee: 88.0
+            },
+            {
+                id: 2,
+                code: "KW-02",
+                name: "Kawasima #2",
+                type: "Kawasima",
+                sku: "Taro Net 35g (Medium Pack)",
+                status: "RUNNING",
+                plannedTime: 450,
+                downtime: 38,
+                operatingTime: 412,
+                idealSpeed: 140,
+                actualSpeed: 128,
+                targetOutput: 57680,
+                actualOutput: 52736,
+                goodOutput: 52420,
+                rejectOutput: 316,
+                avail: 91.6,
+                perf: 91.4,
+                qual: 99.4,
+                oee: 83.2
+            },
+            {
+                id: 3,
+                code: "PM-01",
+                name: "PM #1",
+                type: "PM",
+                sku: "Taro Snack 65g (Regular Pack)",
+                status: "RUNNING",
+                plannedTime: 450,
+                downtime: 32,
+                operatingTime: 418,
+                idealSpeed: 120,
+                actualSpeed: 112,
+                targetOutput: 50160,
+                actualOutput: 46816,
+                goodOutput: 46675,
+                rejectOutput: 141,
+                avail: 92.9,
+                perf: 93.3,
+                qual: 99.7,
+                oee: 86.4
+            },
+            {
+                id: 4,
+                code: "PM-02",
+                name: "PM #2",
+                type: "PM",
+                sku: "Taro 3D 25g (Small Pack)",
+                status: "RUNNING",
+                plannedTime: 450,
+                downtime: 45,
+                operatingTime: 405,
+                idealSpeed: 120,
+                actualSpeed: 106,
+                targetOutput: 48600,
+                actualOutput: 42930,
+                goodOutput: 42672,
+                rejectOutput: 258,
+                avail: 90.0,
+                perf: 88.3,
+                qual: 99.4,
+                oee: 79.0
+            },
+            {
+                id: 5,
+                code: "PM-03",
+                name: "PM #3",
+                type: "PM",
+                sku: "Taro Net Seaweed (Regular Pack)",
+                status: "RUNNING",
+                plannedTime: 450,
+                downtime: 35,
+                operatingTime: 415,
+                idealSpeed: 120,
+                actualSpeed: 114,
+                targetOutput: 49800,
+                actualOutput: 47310,
+                goodOutput: 47215,
+                rejectOutput: 95,
+                avail: 92.2,
+                perf: 95.0,
+                qual: 99.8,
+                oee: 87.4
+            },
+            {
+                id: 6,
+                code: "PM-04",
+                name: "PM #4",
+                type: "PM",
+                sku: "Taro Teriyaki 40g (Medium Pack)",
+                status: "WARNING",
+                plannedTime: 450,
+                downtime: 52,
+                operatingTime: 398,
+                idealSpeed: 120,
+                actualSpeed: 102,
+                targetOutput: 47760,
+                actualOutput: 40596,
+                goodOutput: 40270,
+                rejectOutput: 326,
+                avail: 88.4,
+                perf: 85.0,
+                qual: 99.2,
+                oee: 74.5
+            },
+            {
+                id: 7,
+                code: "PM-05",
+                name: "PM #5",
+                type: "PM",
+                sku: "Taro Barbeque 40g (Medium Pack)",
+                status: "RUNNING",
+                plannedTime: 450,
+                downtime: 25,
+                operatingTime: 425,
+                idealSpeed: 120,
+                actualSpeed: 115,
+                targetOutput: 51000,
+                actualOutput: 48875,
+                goodOutput: 48728,
+                rejectOutput: 147,
+                avail: 94.4,
+                perf: 95.8,
+                qual: 99.7,
+                oee: 90.2
+            },
+            {
+                id: 8,
+                code: "PM-06",
+                name: "PM #6",
+                type: "PM",
+                sku: "Taro Jumbo 110g (Jumbo Pack)",
+                status: "WARNING",
+                plannedTime: 450,
+                downtime: 60,
+                operatingTime: 390,
+                idealSpeed: 120,
+                actualSpeed: 104,
+                targetOutput: 46800,
+                actualOutput: 40560,
+                goodOutput: 40235,
+                rejectOutput: 325,
+                avail: 86.7,
+                perf: 86.7,
+                qual: 99.2,
+                oee: 74.6
+            },
+            {
+                id: 9,
+                code: "PM-07",
+                name: "PM #7",
+                type: "PM",
+                sku: "Taro Mix Pack 50g (Family Pack)",
+                status: "RUNNING",
+                plannedTime: 450,
+                downtime: 30,
+                operatingTime: 420,
+                idealSpeed: 120,
+                actualSpeed: 110,
+                targetOutput: 50400,
+                actualOutput: 46200,
+                goodOutput: 46015,
+                rejectOutput: 185,
+                avail: 93.3,
+                perf: 91.7,
+                qual: 99.6,
+                oee: 85.2
+            }
+        ];
+
+        // Legacy compatibility object
+        const excelOeeData = {
+            "filename": "data_dummy_fks_9mesin",
+            "overview": {
+                "oee": 83.8, "avail": 91.5, "perf": 91.9, "qual": 99.5,
+                "total_packaged": 429713, "good_packaged": 427450, "reject_packaged": 2263,
+                "planned_hours": "67.5", "runtime_hours": "61.8"
+            },
+            "machines": factoryMachines.map(m => ({
+                id: m.id,
+                name: m.name,
+                sku: m.sku,
+                oee: m.oee,
+                avail: m.avail,
+                perf: m.perf,
+                qual: m.qual,
+                ppm: m.actualSpeed,
+                total_pcs: m.actualOutput,
+                good_pcs: m.goodOutput,
+                reject_pcs: m.rejectOutput
+            }))
+        };
+
+        // =========================================================
+        // STATE & HANDLER UNTUK BREAKDOWN 9 MESIN & FORMULA INTERAKTIF
+        // =========================================================
+        let currentActiveMetric = 'perf'; // default to Performance
+        let currentMachineFilter = 'all';
+        let breakdownChartInstance = null;
+
+        const metricMeta = {
+            perf: {
+                title: "ANALISIS & PERHITUNGAN PERFORMANCE RATE (9 MESIN)",
+                subtitle: "Perbandingan 2 Mesin Kawasima & 7 Mesin PM Series • Kecepatan Nyata vs Desain Standar",
+                icon: "⚡",
+                chartTitle: "GRAFIK PERBANDINGAN PERFORMANCE RATE SETIAP MESIN (%)",
+                tableTitle: "📊 DATA DASAR & HASIL PERHITUNGAN PERFORMANCE RATE PER MESIN",
+                unit: "%",
+                target: 90.0,
+                formulaEq: "Performance Rate (%) = (Actual Output / Target Output) × 100% = (Actual Speed / Ideal Speed) × 100%",
+                components: [
+                    { name: "📦 Actual Output (Unit)", desc: "Jumlah kemasan fisik riil yang dihasilkan selama Operating Time." },
+                    { name: "🎯 Ideal Speed / Run Rate (PPM)", desc: "Kecepatan desain standar pabrikan (Kawasima: 140 PPM, PM Series: 120 PPM)." },
+                    { name: "⏱️ Operating Time (Menit)", desc: "Waktu riil mesin berjalan produktif (Planned Time − Total Downtime)." },
+                    { name: "📈 Target Output (Teoritis)", desc: "Kapasitas maksimum ideal mesin (Operating Time × Ideal Speed PPM)." },
+                    { name: "⚠️ Speed Loss & Micro-stops", desc: "Potensi unit hilang akibat penurunan kecepatan, selip, atau macet sesaat (<5 menit)." }
+                ]
+            },
+            avail: {
+                title: "ANALISIS & PERHITUNGAN AVAILABILITY RATE (9 MESIN)",
+                subtitle: "Perbandingan 2 Mesin Kawasima & 7 Mesin PM Series • Waktu Operasi Bersih vs Waktu Terjadwal",
+                icon: "⏱️",
+                chartTitle: "GRAFIK PERBANDINGAN AVAILABILITY RATE SETIAP MESIN (%)",
+                tableTitle: "📊 DATA DASAR & HASIL PERHITUNGAN AVAILABILITY RATE PER MESIN",
+                unit: "%",
+                target: 90.0,
+                formulaEq: "Availability Rate (%) = (Operating Time / Planned Production Time) × 100% = (Planned Time - Downtime) / Planned Time × 100%",
+                components: [
+                    { name: "📅 Planned Production Time", desc: "Total alokasi waktu kerja shift untuk mesin beroperasi (450 Menit / 7.5 Jam)." },
+                    { name: "🛑 Unplanned Downtime", desc: "Total durasi henti tidak terencana (kerusakan mesin, ganti roll plastik macet, tunggu bahan)." },
+                    { name: "⚙️ Operating Time (Run Time)", desc: "Durasi bersih mesin benar-benar berputar dan memproses produk." },
+                    { name: "📉 Downtime Loss Rate (%)", desc: "Persentase waktu terbuang dari jadwal rencana shift." }
+                ]
+            },
+            qual: {
+                title: "ANALISIS & PERHITUNGAN QUALITY RATE (9 MESIN)",
+                subtitle: "Perbandingan 2 Mesin Kawasima & 7 Mesin PM Series • Rasio Produk Lolos Standar QC",
+                icon: "✨",
+                chartTitle: "GRAFIK PERBANDINGAN QUALITY RATE SETIAP MESIN (%)",
+                tableTitle: "📊 DATA DASAR & HASIL PERHITUNGAN QUALITY RATE PER MESIN",
+                unit: "%",
+                target: 99.0,
+                formulaEq: "Quality Rate (%) = (Good Output / Total Output) × 100% = (Total Output - Reject) / Total Output × 100%",
+                components: [
+                    { name: "🏭 Total Output (Pcs)", desc: "Seluruh kemasan yang diproduksi dan keluar dari mesin packaging." },
+                    { name: "✅ Good Output (Pcs)", desc: "Kemasan sempurna yang lolos standar mutu (bobot tepat, seal rapi & kedap)." },
+                    { name: "❌ Reject / Defect (Pcs)", desc: "Kemasan cacat (seal bocor, berat kurang, date code kabur, etiket miring)." },
+                    { name: "🔍 Defect Rate (%)", desc: "Tingkat persentase cacat produk terhadap total output (100% − Quality Rate)." }
+                ]
+            },
+            oee: {
+                title: "ANALISIS & PERHITUNGAN OVERALL EQUIPMENT EFFECTIVENESS / OEE (9 MESIN)",
+                subtitle: "Perbandingan 2 Mesin Kawasima & 7 Mesin PM Series • Integrasi Availability × Performance × Quality",
+                icon: "📊",
+                chartTitle: "GRAFIK PERBANDINGAN REAL-TIME OEE SETIAP MESIN (%)",
+                tableTitle: "📊 DATA DASAR & HASIL PERHITUNGAN 3 PILAR OEE PER MESIN",
+                unit: "%",
+                target: 85.0,
+                formulaEq: "Overall Equipment Effectiveness (OEE) = Availability × Performance × Quality Rate × 100%",
+                components: [
+                    { name: "⏱️ Availability Pillar (%)", desc: "Efisiensi pemanfaatan waktu kerja terhadap rencana shift." },
+                    { name: "⚡ Performance Pillar (%)", desc: "Efisiensi kecepatan kerja aktual terhadap kapasitas desain." },
+                    { name: "✨ Quality Pillar (%)", desc: "Rasio produk bebas cacat yang siap didistribusikan ke pasar." },
+                    { name: "🏆 World Class Benchmark", desc: "Standar industri global manufaktur modern (OEE ≥ 85.0%)." }
+                ]
+            }
+        };
+
+
+        // =========================================================
+        // TAB SWITCHING FUNCTION (OVERVIEW vs DETAIL PACKAGING)
+        // =========================================================
+        function switchTab(tabName) {
+            const btnOverview = document.getElementById('btnTabOverview');
+            const btnPackaging = document.getElementById('btnTabPackaging');
+            const pageOverview = document.getElementById('pageOverview');
+            const pagePackaging = document.getElementById('pagePackaging');
+
+            if (tabName === 'overview') {
+                if (btnOverview) btnOverview.classList.add('active');
+                if (btnPackaging) btnPackaging.classList.remove('active');
+                if (pageOverview) pageOverview.classList.add('active');
+                if (pagePackaging) pagePackaging.classList.remove('active');
+            } else {
+                if (btnOverview) btnOverview.classList.remove('active');
+                if (btnPackaging) btnPackaging.classList.add('active');
+                if (pageOverview) pageOverview.classList.remove('active');
+                if (pagePackaging) pagePackaging.classList.add('active');
+            }
+        }
+
+        function selectMetric(metricKey) {
+            if (!metricMeta[metricKey]) return;
+            currentActiveMetric = metricKey;
+
+            // 1. Update active card styling on BOTH Overview and Packaging KPI cards
+            const cardIds = {
+                oee: ['cardKpiOee', 'ovKpiOee'],
+                avail: ['cardKpiAvail', 'ovKpiAvail'],
+                perf: ['cardKpiPerf', 'ovKpiPerf'],
+                qual: ['cardKpiQual', 'ovKpiQual']
+            };
+
+            Object.keys(cardIds).forEach(k => {
+                const ids = cardIds[k];
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        if (k === metricKey) {
+                            el.classList.add('active-kpi');
+                        } else {
+                            el.classList.remove('active-kpi');
+                        }
+                    }
+                });
+            });
+
+            const meta = metricMeta[metricKey];
+
+            // 2. Update Header
+            const iconEl = document.getElementById('detailSectionIcon');
+            const titleEl = document.getElementById('detailSectionTitle');
+            const subtitleEl = document.getElementById('detailSectionSubtitle');
+            const chartTitleEl = document.getElementById('chartTitle');
+            const tableTitleEl = document.getElementById('tableTitle');
+
+            if (iconEl) iconEl.innerText = meta.icon;
+            if (titleEl) titleEl.innerText = meta.title;
+            if (subtitleEl) subtitleEl.innerText = meta.subtitle;
+            if (chartTitleEl) chartTitleEl.innerText = meta.chartTitle;
+            if (tableTitleEl) tableTitleEl.innerText = meta.tableTitle;
+
+            // 3. Buka modal dulu agar canvas punya ukuran saat chart dirender
+            openMetricModal();
+
+            // 4. Render Formula Box
+            renderFormulaBox(meta);
+
+            // 5. Render Visual Chart
+            renderBreakdownChart();
+
+            // 6. Render Calculation Table & reset panel detail mesin
+            selectedMachineId = null;
+            renderCalculationTable();
+            renderMachineDetail();
+        }
+
+        // =========================================================
+        // MODAL OPEN / CLOSE
+        // =========================================================
+        function openMetricModal() {
+            const modal = document.getElementById('metricModal');
+            if (!modal) return;
+            modal.classList.add('open');
+            modal.scrollTop = 0;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeMetricModal() {
+            const modal = document.getElementById('metricModal');
+            if (!modal) return;
+            modal.classList.remove('open');
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.clickable-kpi-card.active-kpi').forEach(el => el.classList.remove('active-kpi'));
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeMetricModal();
+        });
+
+        // =========================================================
+        // DETAIL PERHITUNGAN PER MESIN (klik batang grafik / baris tabel)
+        // =========================================================
+        let selectedMachineId = null;
+
+        function selectMachine(id) {
+            selectedMachineId = (selectedMachineId === id) ? null : id;
+            document.querySelectorAll('#tableContainer tbody tr').forEach(tr => {
+                tr.classList.toggle('selected-row', parseInt(tr.dataset.machineId) === selectedMachineId);
+            });
+            renderMachineDetail();
+            const panel = document.getElementById('machineDetailPanel');
+            if (selectedMachineId !== null && panel) {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function renderMachineDetail() {
+            const panel = document.getElementById('machineDetailPanel');
+            if (!panel) return;
+            const m = factoryMachines.find(x => x.id === selectedMachineId);
+            if (!m) {
+                panel.style.display = 'none';
+                panel.innerHTML = '';
+                return;
+            }
+
+            const fmt = n => n.toLocaleString('id-ID');
+            const pct = (a, b, d = 1) => ((a / b) * 100).toFixed(d);
+            const target = metricMeta[currentActiveMetric].target;
+            const value = currentActiveMetric === 'perf' ? m.perf
+                : currentActiveMetric === 'avail' ? m.avail
+                    : currentActiveMetric === 'qual' ? m.qual : m.oee;
+            const gap = +(value - target).toFixed(1);
+            const gapHtml = gap >= 0
+                ? `<span class="stat-badge world-class">▲ ${gap} pp di atas target ${target}%</span>`
+                : `<span class="stat-badge warning">▼ ${Math.abs(gap)} pp di bawah target ${target}%</span>`;
+
+            let stats = [], steps = '', note = '';
+
+            if (currentActiveMetric === 'perf') {
+                const speedLoss = m.targetOutput - m.actualOutput;
+                stats = [
+                    ['Operating Time', `${m.operatingTime} min`],
+                    ['Ideal Speed', `${m.idealSpeed} PPM`],
+                    ['Actual Speed', `${m.actualSpeed} PPM`],
+                    ['Target Output', `${fmt(m.targetOutput)} pcs`],
+                    ['Actual Output', `${fmt(m.actualOutput)} pcs`],
+                    ['Speed Loss', `${fmt(speedLoss)} pcs`]
+                ];
+                steps = `
+                    Target Output = Operating Time × Ideal Speed<br>
+                    &nbsp;&nbsp;= ${m.operatingTime} min × ${m.idealSpeed} PPM = <span class="hl">${fmt(m.targetOutput)} pcs</span><br>
+                    Performance = Actual Output ÷ Target Output × 100%<br>
+                    &nbsp;&nbsp;= ${fmt(m.actualOutput)} ÷ ${fmt(m.targetOutput)} × 100% = <span class="hl">${pct(m.actualOutput, m.targetOutput)}%</span>`;
+                note = `Mesin kehilangan <b>${fmt(speedLoss)} pcs</b> akibat speed loss & micro-stop (rata-rata ${m.idealSpeed - m.actualSpeed} PPM di bawah kecepatan ideal).`;
+            } else if (currentActiveMetric === 'avail') {
+                stats = [
+                    ['Planned Time', `${m.plannedTime} min`],
+                    ['Unplanned Downtime', `${m.downtime} min`],
+                    ['Operating Time', `${m.operatingTime} min`],
+                    ['Downtime Loss', `${pct(m.downtime, m.plannedTime)}%`]
+                ];
+                steps = `
+                    Operating Time = Planned Time − Downtime<br>
+                    &nbsp;&nbsp;= ${m.plannedTime} − ${m.downtime} = <span class="hl">${m.operatingTime} min</span><br>
+                    Availability = Operating Time ÷ Planned Time × 100%<br>
+                    &nbsp;&nbsp;= ${m.operatingTime} ÷ ${m.plannedTime} × 100% = <span class="hl">${pct(m.operatingTime, m.plannedTime)}%</span>`;
+                note = `Setiap shift mesin berhenti <b>${m.downtime} menit</b> di luar rencana — setara ±${fmt(m.downtime * m.idealSpeed)} pcs potensi output pada kecepatan ideal.`;
+            } else if (currentActiveMetric === 'qual') {
+                stats = [
+                    ['Total Output', `${fmt(m.actualOutput)} pcs`],
+                    ['Good Output', `${fmt(m.goodOutput)} pcs`],
+                    ['Reject / Defect', `${fmt(m.rejectOutput)} pcs`],
+                    ['Defect Rate', `${pct(m.rejectOutput, m.actualOutput, 2)}%`]
+                ];
+                steps = `
+                    Good Output = Total Output − Reject<br>
+                    &nbsp;&nbsp;= ${fmt(m.actualOutput)} − ${fmt(m.rejectOutput)} = <span class="hl">${fmt(m.goodOutput)} pcs</span><br>
+                    Quality Rate = Good Output ÷ Total Output × 100%<br>
+                    &nbsp;&nbsp;= ${fmt(m.goodOutput)} ÷ ${fmt(m.actualOutput)} × 100% = <span class="hl">${pct(m.goodOutput, m.actualOutput)}%</span>`;
+                note = `Dari setiap 1.000 kemasan, sekitar <b>${(m.rejectOutput / m.actualOutput * 1000).toFixed(1)} pcs</b> ditolak QC (seal bocor, berat kurang, date code, etiket).`;
+            } else {
+                stats = [
+                    ['Availability', `${m.avail}%`],
+                    ['Performance', `${m.perf}%`],
+                    ['Quality Rate', `${m.qual}%`],
+                    ['Good Output', `${fmt(m.goodOutput)} pcs`]
+                ];
+                const pillars = [['Availability', m.avail], ['Performance', m.perf], ['Quality', m.qual]];
+                const weakest = pillars.reduce((a, b) => (b[1] < a[1] ? b : a));
+                steps = `
+                    OEE = Availability × Performance × Quality<br>
+                    &nbsp;&nbsp;= ${(m.avail / 100).toFixed(3)} × ${(m.perf / 100).toFixed(3)} × ${(m.qual / 100).toFixed(3)} × 100%<br>
+                    &nbsp;&nbsp;= <span class="hl">${((m.avail * m.perf * m.qual) / 10000).toFixed(1)}%</span>`;
+                note = `Pilar terlemah: <b>${weakest[0]} (${weakest[1]}%)</b> — fokus perbaikan di sini memberi dampak OEE terbesar.`;
+            }
+
+            panel.innerHTML = `
+                <div class="md-head">
+                    <div>
+                        <div class="md-name">🔎 Detail Perhitungan — ${m.name} <span style="color:var(--text-muted); font-weight:600;">(${m.code})</span></div>
+                        <div class="md-sku">${m.type === 'Kawasima' ? '📦 Kawasima' : '⚙️ PM Series'} • ${m.sku} • Status: ${m.status}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        ${gapHtml}
+                        <button class="modal-close-btn" style="width:28px; height:28px; font-size:12px;" onclick="selectMachine(${m.id})" title="Tutup detail">✕</button>
+                    </div>
+                </div>
+                <div class="md-grid">
+                    ${stats.map(([k, v]) => `<div class="md-stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('')}
+                </div>
+                <div class="md-steps">${steps}</div>
+                <div class="md-note">${note}</div>`;
+            panel.style.display = 'block';
+        }
+
+        function filterMachineGroup(group) {
+            currentMachineFilter = group;
+            ['btnFilterAll', 'btnFilterKawasima', 'btnFilterPM'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.classList.remove('active');
+            });
+            if (group === 'all') document.getElementById('btnFilterAll').classList.add('active');
+            if (group === 'Kawasima') document.getElementById('btnFilterKawasima').classList.add('active');
+            if (group === 'PM') document.getElementById('btnFilterPM').classList.add('active');
+
+            renderBreakdownChart();
+            renderCalculationTable();
+
+            // Tutup panel detail jika mesin terpilih tidak termasuk filter
+            if (selectedMachineId !== null && !getFilteredMachines().some(m => m.id === selectedMachineId)) {
+                selectedMachineId = null;
+                renderMachineDetail();
+            }
+        }
+
+        function getFilteredMachines() {
+            if (currentMachineFilter === 'Kawasima') {
+                return factoryMachines.filter(m => m.type === 'Kawasima');
+            } else if (currentMachineFilter === 'PM') {
+                return factoryMachines.filter(m => m.type === 'PM');
+            }
+            return factoryMachines;
+        }
+
+        function renderFormulaBox(meta) {
+            const container = document.getElementById('formulaContainer');
+            if (!container) return;
+
+            let html = `
+                <div class="formula-top">
+                    <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:#94A3B8; font-weight:700;">
+                        📐 Rumus Matematis Standar OEE
+                    </div>
+                    <div class="formula-equation">
+                        ${meta.formulaEq}
+                    </div>
+                </div>
+                <div class="formula-components-grid">
+            `;
+
+            meta.components.forEach(comp => {
+                html += `
+                    <div class="formula-comp-card">
+                        <div class="comp-name">${comp.name}</div>
+                        <div class="comp-desc">${comp.desc}</div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderBreakdownChart() {
+            const ctx = document.getElementById('machineMetricChart');
+            if (!ctx) return;
+
+            const machines = getFilteredMachines();
+            const labels = machines.map(m => m.name);
+            const dataValues = machines.map(m => {
+                if (currentActiveMetric === 'perf') return m.perf;
+                if (currentActiveMetric === 'avail') return m.avail;
+                if (currentActiveMetric === 'qual') return m.qual;
+                return m.oee;
+            });
+
+            const targetVal = metricMeta[currentActiveMetric].target;
+
+            // Color coding based on value
+            const bgColors = dataValues.map(val => {
+                if (val >= 90) return '#10B981'; // Green
+                if (val >= 80) return '#E5A91A'; // Amber
+                return '#EF4444'; // Red
+            });
+
+            if (breakdownChartInstance) {
+                breakdownChartInstance.destroy();
+            }
+
+            breakdownChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: `${metricMeta[currentActiveMetric].title.split('(')[0].trim()} (%)`,
+                            data: dataValues,
+                            backgroundColor: bgColors,
+                            borderRadius: 6,
+                            barThickness: 28,
+                            maxBarThickness: 36
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    onClick: (evt, elements) => {
+                        if (elements.length) selectMachine(machines[elements[0].index].id);
+                    },
+                    onHover: (evt, elements) => {
+                        evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1E232A',
+                            titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
+                            bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    const m = machines[context.dataIndex];
+                                    return [
+                                        `Nilai: ${context.parsed.y}%`,
+                                        `SKU: ${m.sku}`,
+                                        `Speed: ${m.actualSpeed} PPM (Ideal: ${m.idealSpeed} PPM)`,
+                                        `Output: ${m.actualOutput.toLocaleString('id-ID')} Pcs`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 60,
+                            max: 100,
+                            ticks: {
+                                stepSize: 10,
+                                callback: val => val + '%',
+                                font: { size: 11, family: 'Plus Jakarta Sans' },
+                                color: '#6B7280'
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.06)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: { size: 12, weight: '600', family: 'Plus Jakarta Sans' },
+                                color: '#374151'
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderCalculationTable() {
+            const container = document.getElementById('tableContainer');
+            if (!container) return;
+
+            const machines = getFilteredMachines();
+            let tableHtml = '<table class="calc-table"><thead>';
+
+            if (currentActiveMetric === 'perf') {
+                tableHtml += `
+                    <tr>
+                        <th style="width:40px; text-align:center;">No</th>
+                        <th>Mesin Packaging</th>
+                        <th>Tipe Mesin</th>
+                        <th>SKU Produk</th>
+                        <th class="num">Operating Time</th>
+                        <th class="num">Ideal Speed</th>
+                        <th class="num">Target Output</th>
+                        <th class="num">Actual Output</th>
+                        <th class="num">Actual Speed</th>
+                        <th class="num">Speed Loss</th>
+                        <th class="num" style="min-width:140px;">Performance Rate</th>
+                        <th style="text-align:center;">Evaluasi</th>
+                    </tr>
+                </thead><tbody>`;
+
+                let totalOp = 0, totalTarget = 0, totalActual = 0, totalLoss = 0;
+
+                machines.forEach((m, idx) => {
+                    const speedLoss = m.targetOutput - m.actualOutput;
+                    totalOp += m.operatingTime;
+                    totalTarget += m.targetOutput;
+                    totalActual += m.actualOutput;
+                    totalLoss += speedLoss;
+
+                    let statBadge = '<span class="stat-badge world-class">🏆 Optimal (≥90%)</span>';
+                    let barColor = '#10B981';
+                    if (m.perf < 85) {
+                        statBadge = '<span class="stat-badge warning">⚠️ Under (&lt;85%)</span>';
+                        barColor = '#EF4444';
+                    } else if (m.perf < 90) {
+                        statBadge = '<span class="stat-badge good">⚡ Normal (85-89%)</span>';
+                        barColor = '#E5A91A';
+                    }
+
+                    tableHtml += `
+                        <tr data-machine-id="${m.id}" onclick="selectMachine(${m.id})" title="Klik untuk detail perhitungan ${m.name}">
+                            <td style="text-align:center; color:var(--text-muted); font-weight:600;">${idx + 1}</td>
+                            <td><strong style="color:var(--brand-dark);">${m.name}</strong></td>
+                            <td><span class="${m.type === 'Kawasima' ? 'badge-kawasima' : 'badge-pm'}">${m.type === 'Kawasima' ? '📦 Kawasima' : '⚙️ PM Series'}</span></td>
+                            <td style="color:var(--text-secondary); font-size:11.5px;">${m.sku}</td>
+                            <td class="num">${m.operatingTime} min</td>
+                            <td class="num">${m.idealSpeed} PPM</td>
+                            <td class="num">${m.targetOutput.toLocaleString('id-ID')} pcs</td>
+                            <td class="num"><b style="color:var(--brand-dark);">${m.actualOutput.toLocaleString('id-ID')} pcs</b></td>
+                            <td class="num">${m.actualSpeed} PPM</td>
+                            <td class="num" style="color:#EF4444;">-${speedLoss.toLocaleString('id-ID')} pcs</td>
+                            <td class="num">
+                                <span style="font-weight:800; color:var(--brand-dark);">${m.perf}%</span>
+                                <div class="mini-progress"><div class="mini-progress-fill" style="width:${m.perf}%; background:${barColor};"></div></div>
+                            </td>
+                            <td style="text-align:center;">${statBadge}</td>
+                        </tr>
+                    `;
+                });
+
+                const avgPerf = +((totalActual / totalTarget) * 100).toFixed(1);
+                tableHtml += `
+                    </tbody><tfoot>
+                    <tr class="total-row">
+                        <td colspan="4" style="text-align:left;">TOTAL / RATA-RATA (${machines.length} MESIN)</td>
+                        <td class="num">${totalOp.toLocaleString('id-ID')} min</td>
+                        <td class="num">-</td>
+                        <td class="num">${totalTarget.toLocaleString('id-ID')} pcs</td>
+                        <td class="num">${totalActual.toLocaleString('id-ID')} pcs</td>
+                        <td class="num">-</td>
+                        <td class="num" style="color:#EF4444;">-${totalLoss.toLocaleString('id-ID')} pcs</td>
+                        <td class="num">
+                            <span style="font-size:14px; font-weight:800; color:#10B981;">${avgPerf}%</span>
+                        </td>
+                        <td style="text-align:center;"><span class="stat-badge world-class">Target Achieved</span></td>
+                    </tr>
+                    </tfoot>`;
+
+            } else if (currentActiveMetric === 'avail') {
+                tableHtml += `
+                    <tr>
+                        <th style="width:40px; text-align:center;">No</th>
+                        <th>Mesin Packaging</th>
+                        <th>Tipe Mesin</th>
+                        <th>SKU Produk</th>
+                        <th class="num">Planned Time</th>
+                        <th class="num">Unplanned Downtime</th>
+                        <th class="num">Operating Time</th>
+                        <th class="num">Downtime Loss (%)</th>
+                        <th class="num" style="min-width:140px;">Availability Rate</th>
+                        <th style="text-align:center;">Status</th>
+                    </tr>
+                </thead><tbody>`;
+
+                let totalPlanned = 0, totalDown = 0, totalOp = 0;
+
+                machines.forEach((m, idx) => {
+                    totalPlanned += m.plannedTime;
+                    totalDown += m.downtime;
+                    totalOp += m.operatingTime;
+                    const downPct = ((m.downtime / m.plannedTime) * 100).toFixed(1);
+
+                    let statBadge = '<span class="stat-badge world-class">🏆 Optimal (≥90%)</span>';
+                    let barColor = '#10B981';
+                    if (m.avail < 88) {
+                        statBadge = '<span class="stat-badge warning">⚠️ High Downtime</span>';
+                        barColor = '#EF4444';
+                    } else if (m.avail < 92) {
+                        statBadge = '<span class="stat-badge good">⚡ Normal</span>';
+                        barColor = '#E5A91A';
+                    }
+
+                    tableHtml += `
+                        <tr data-machine-id="${m.id}" onclick="selectMachine(${m.id})" title="Klik untuk detail perhitungan ${m.name}">
+                            <td style="text-align:center; color:var(--text-muted); font-weight:600;">${idx + 1}</td>
+                            <td><strong style="color:var(--brand-dark);">${m.name}</strong></td>
+                            <td><span class="${m.type === 'Kawasima' ? 'badge-kawasima' : 'badge-pm'}">${m.type === 'Kawasima' ? '📦 Kawasima' : '⚙️ PM Series'}</span></td>
+                            <td style="color:var(--text-secondary); font-size:11.5px;">${m.sku}</td>
+                            <td class="num">${m.plannedTime} min</td>
+                            <td class="num" style="color:#EF4444;">${m.downtime} min</td>
+                            <td class="num"><b style="color:var(--brand-dark);">${m.operatingTime} min</b></td>
+                            <td class="num" style="color:#EF4444;">${downPct}%</td>
+                            <td class="num">
+                                <span style="font-weight:800; color:var(--brand-dark);">${m.avail}%</span>
+                                <div class="mini-progress"><div class="mini-progress-fill" style="width:${m.avail}%; background:${barColor};"></div></div>
+                            </td>
+                            <td style="text-align:center;">${statBadge}</td>
+                        </tr>
+                    `;
+                });
+
+                const avgAvail = +((totalOp / totalPlanned) * 100).toFixed(1);
+                tableHtml += `
+                    </tbody><tfoot>
+                    <tr class="total-row">
+                        <td colspan="4" style="text-align:left;">TOTAL / RATA-RATA (${machines.length} MESIN)</td>
+                        <td class="num">${totalPlanned.toLocaleString('id-ID')} min</td>
+                        <td class="num" style="color:#EF4444;">${totalDown.toLocaleString('id-ID')} min</td>
+                        <td class="num">${totalOp.toLocaleString('id-ID')} min</td>
+                        <td class="num" style="color:#EF4444;">${((totalDown / totalPlanned) * 100).toFixed(1)}%</td>
+                        <td class="num"><span style="font-size:14px; font-weight:800; color:#10B981;">${avgAvail}%</span></td>
+                        <td style="text-align:center;"><span class="stat-badge world-class">Shift Stable</span></td>
+                    </tr>
+                    </tfoot>`;
+
+            } else if (currentActiveMetric === 'qual') {
+                tableHtml += `
+                    <tr>
+                        <th style="width:40px; text-align:center;">No</th>
+                        <th>Mesin Packaging</th>
+                        <th>Tipe Mesin</th>
+                        <th>SKU Produk</th>
+                        <th class="num">Total Output</th>
+                        <th class="num">Good Output</th>
+                        <th class="num">Reject / Defect</th>
+                        <th class="num">Defect Rate (%)</th>
+                        <th class="num" style="min-width:140px;">Quality Rate</th>
+                        <th style="text-align:center;">Status</th>
+                    </tr>
+                </thead><tbody>`;
+
+                let totalAll = 0, totalGood = 0, totalRej = 0;
+
+                machines.forEach((m, idx) => {
+                    totalAll += m.actualOutput;
+                    totalGood += m.goodOutput;
+                    totalRej += m.rejectOutput;
+                    const defectPct = ((m.rejectOutput / m.actualOutput) * 100).toFixed(2);
+
+                    tableHtml += `
+                        <tr data-machine-id="${m.id}" onclick="selectMachine(${m.id})" title="Klik untuk detail perhitungan ${m.name}">
+                            <td style="text-align:center; color:var(--text-muted); font-weight:600;">${idx + 1}</td>
+                            <td><strong style="color:var(--brand-dark);">${m.name}</strong></td>
+                            <td><span class="${m.type === 'Kawasima' ? 'badge-kawasima' : 'badge-pm'}">${m.type === 'Kawasima' ? '📦 Kawasima' : '⚙️ PM Series'}</span></td>
+                            <td style="color:var(--text-secondary); font-size:11.5px;">${m.sku}</td>
+                            <td class="num">${m.actualOutput.toLocaleString('id-ID')} pcs</td>
+                            <td class="num" style="color:#10B981; font-weight:700;">${m.goodOutput.toLocaleString('id-ID')} pcs</td>
+                            <td class="num" style="color:#EF4444;">${m.rejectOutput.toLocaleString('id-ID')} pcs</td>
+                            <td class="num" style="color:#EF4444;">${defectPct}%</td>
+                            <td class="num">
+                                <span style="font-weight:800; color:var(--brand-dark);">${m.qual}%</span>
+                                <div class="mini-progress"><div class="mini-progress-fill" style="width:${m.qual}%; background:#10B981;"></div></div>
+                            </td>
+                            <td style="text-align:center;"><span class="stat-badge world-class">✅ Pass QC</span></td>
+                        </tr>
+                    `;
+                });
+
+                const avgQual = +((totalGood / totalAll) * 100).toFixed(1);
+                tableHtml += `
+                    </tbody><tfoot>
+                    <tr class="total-row">
+                        <td colspan="4" style="text-align:left;">TOTAL / RATA-RATA (${machines.length} MESIN)</td>
+                        <td class="num">${totalAll.toLocaleString('id-ID')} pcs</td>
+                        <td class="num" style="color:#10B981;">${totalGood.toLocaleString('id-ID')} pcs</td>
+                        <td class="num" style="color:#EF4444;">${totalRej.toLocaleString('id-ID')} pcs</td>
+                        <td class="num" style="color:#EF4444;">${((totalRej / totalAll) * 100).toFixed(2)}%</td>
+                        <td class="num"><span style="font-size:14px; font-weight:800; color:#10B981;">${avgQual}%</span></td>
+                        <td style="text-align:center;"><span class="stat-badge world-class">World Class Quality</span></td>
+                    </tr>
+                    </tfoot>`;
+
+            } else {
+                // OEE Overall
+                tableHtml += `
+                    <tr>
+                        <th style="width:40px; text-align:center;">No</th>
+                        <th>Mesin Packaging</th>
+                        <th>Tipe Mesin</th>
+                        <th>SKU Produk</th>
+                        <th class="num">Availability (%)</th>
+                        <th class="num">Performance (%)</th>
+                        <th class="num">Quality Rate (%)</th>
+                        <th class="num" style="min-width:140px;">OEE Score</th>
+                        <th style="text-align:center;">World Class Status</th>
+                    </tr>
+                </thead><tbody>`;
+
+                let sumOee = 0, sumAvail = 0, sumPerf = 0, sumQual = 0;
+
+                machines.forEach((m, idx) => {
+                    sumOee += m.oee;
+                    sumAvail += m.avail;
+                    sumPerf += m.perf;
+                    sumQual += m.qual;
+
+                    let statBadge = '<span class="stat-badge world-class">🏆 World Class (≥85%)</span>';
+                    let barColor = '#10B981';
+                    if (m.oee < 75) {
+                        statBadge = '<span class="stat-badge warning">⚠️ Under (&lt;75%)</span>';
+                        barColor = '#EF4444';
+                    } else if (m.oee < 85) {
+                        statBadge = '<span class="stat-badge good">⚡ Typical (75-84%)</span>';
+                        barColor = '#E5A91A';
+                    }
+
+                    tableHtml += `
+                        <tr data-machine-id="${m.id}" onclick="selectMachine(${m.id})" title="Klik untuk detail perhitungan ${m.name}">
+                            <td style="text-align:center; color:var(--text-muted); font-weight:600;">${idx + 1}</td>
+                            <td><strong style="color:var(--brand-dark);">${m.name}</strong></td>
+                            <td><span class="${m.type === 'Kawasima' ? 'badge-kawasima' : 'badge-pm'}">${m.type === 'Kawasima' ? '📦 Kawasima' : '⚙️ PM Series'}</span></td>
+                            <td style="color:var(--text-secondary); font-size:11.5px;">${m.sku}</td>
+                            <td class="num">${m.avail}%</td>
+                            <td class="num">${m.perf}%</td>
+                            <td class="num">${m.qual}%</td>
+                            <td class="num">
+                                <span style="font-weight:800; color:var(--brand-dark); font-size:13.5px;">${m.oee}%</span>
+                                <div class="mini-progress"><div class="mini-progress-fill" style="width:${m.oee}%; background:${barColor};"></div></div>
+                            </td>
+                            <td style="text-align:center;">${statBadge}</td>
+                        </tr>
+                    `;
+                });
+
+                const avgOee = +(sumOee / machines.length).toFixed(1);
+                const avgAvail = +(sumAvail / machines.length).toFixed(1);
+                const avgPerf = +(sumPerf / machines.length).toFixed(1);
+                const avgQual = +(sumQual / machines.length).toFixed(1);
+
+                tableHtml += `
+                    </tbody><tfoot>
+                    <tr class="total-row">
+                        <td colspan="4" style="text-align:left;">RATA-RATA (${machines.length} MESIN)</td>
+                        <td class="num">${avgAvail}%</td>
+                        <td class="num">${avgPerf}%</td>
+                        <td class="num">${avgQual}%</td>
+                        <td class="num"><span style="font-size:14px; font-weight:800; color:#10B981;">${avgOee}%</span></td>
+                        <td style="text-align:center;"><span class="stat-badge world-class">Target Reached</span></td>
+                    </tr>
+                    </tfoot>`;
+            }
+
+            tableHtml += '</table>';
+            container.innerHTML = tableHtml;
+        }
+
+        // =========================================================
+        // INITIALIZATION HOOK
+        // =========================================================
+        // Modal analisis hanya dibuka saat kartu gauge diklik (lihat selectMetric)
+
+        function onMachineSelectChange() {
+            const mId = parseInt(document.getElementById('lineSelect').value);
+            const mData = excelOeeData.machines.find(m => m.id === mId) || excelOeeData.machines[2];
+
+            document.getElementById('statusPillText').innerText = `STATUS: ${mData.name.toUpperCase()} RUNNING NORMAL`;
+            document.getElementById('pkOeeVal').innerText = mData.oee + '%';
+            document.getElementById('pkAvailVal').innerText = mData.avail + '%';
+            document.getElementById('pkPerfVal').innerText = mData.perf + '%';
+            document.getElementById('pkQualVal').innerText = mData.qual + '%';
+
+            document.getElementById('livePpm').innerText = mData.ppm + ' PPM';
+            document.getElementById('liveTotalCount').innerText = mData.total_pcs.toLocaleString('id-ID');
+            document.getElementById('liveGoodCount').innerText = mData.good_pcs.toLocaleString('id-ID');
+            document.getElementById('liveRejectCount').innerText = `${mData.reject_pcs} (0.20%)`;
+
+            updateTargetSpeed(mData.ppm);
+
+            createGauge('pkGOee', mData.oee, mData.oee >= 80 ? '#10B981' : '#E5A91A');
+            createGauge('pkGAvail', mData.avail, '#E5A91A');
+            createGauge('pkGPerf', mData.perf, '#33373E');
+            createGauge('pkGQual', mData.qual, '#10B981');
+
+            addLog('info', 'CONFIG', `Berpindah ke data live ${mData.name} (${mData.sku}).`);
+        }
+
+        // =========================================================
+        // EXPORT FITUR: SPREADSHEET (CSV) & DASHBOARD PNG SCREENSHOT
+        // =========================================================
+        function exportDataCSV() {
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            const timeStr = now.toLocaleTimeString('id-ID', { hour12: false });
+            const selectedLine = document.getElementById('lineSelect') ? document.getElementById('lineSelect').value : '3';
+
+            let csvContent = "\uFEFF";
+            csvContent += "=== LAPORAN DATA OEE — FKS FOOD (DATA DUMMY) ===\n";
+            csvContent += `Tanggal Export,${dateStr} ${timeStr}\n`;
+            csvContent += `Sumber Data,Data Dummy / Simulasi\n`;
+            csvContent += `Mesin Terpilih,Mesin Packaging #${selectedLine}\n\n`;
+
+            csvContent += "--- METRIK UTAMA REAL-TIME ---\n";
+            csvContent += "Parameter,Nilai Saat Ini,Target,Status\n";
+            csvContent += `Overall OEE,${document.getElementById('pkOeeVal').innerText},85.0%,NORMAL\n`;
+            csvContent += `Availability,${document.getElementById('pkAvailVal').innerText},90.0%,NORMAL\n`;
+            csvContent += `Performance,${document.getElementById('pkPerfVal').innerText},95.0%,NORMAL\n`;
+            csvContent += `Quality Rate,${document.getElementById('pkQualVal').innerText},99.5%,EXCELLENT\n\n`;
+
+            csvContent += "--- SHIFT COUNTER PRODUKSI MESIN ---\n";
+            csvContent += "Indikator,Jumlah (Unit / PPM)\n";
+            csvContent += `Kecepatan Mesin,${document.getElementById('livePpm').innerText}\n`;
+            csvContent += `Total Output,${document.getElementById('liveTotalCount').innerText}\n`;
+            csvContent += `Good Product,${document.getElementById('liveGoodCount').innerText}\n`;
+            csvContent += `Defect / Reject,${document.getElementById('liveRejectCount').innerText}\n\n`;
+
+            csvContent += "--- TOP DOWNTIME LOSSES (JUNI 2026) ---\n";
+            csvContent += "Kategori Losses,Jam Hilang,Persentase Total\n";
+            csvContent += "Planned Downtime (Sanitasi A001),540,35.1%\n";
+            csvContent += "Ganti Etiket (MP-1),380,24.7%\n";
+            csvContent += "Ganti Markem (MP-2),260,16.9%\n";
+            csvContent += "Potongan Tidak Stabil (MP-3),190,12.3%\n";
+            csvContent += "Cleaning Ganti Rasa (DP-5),110,7.1%\n";
+            csvContent += "Trial R&D (A002),60,3.9%\n";
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `FKS_Food_OEE_Juni_2026_${dateStr}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast(`📊 Spreadsheet Laporan Data (CSV) berhasil di-download!`);
+            addLog('success', 'EXPORT', 'Data OEE berhasil diunduh sebagai file CSV oleh user.');
+        }
+
+        function exportDashboardImage() {
+            showToast(`📸 Mengambil gambar screenshot HD (Warna Kontras Tinggi)... Mohon tunggu.`);
+
+            const toast = document.getElementById('toastNotice');
+            const exportBtns = document.querySelector('.export-actions');
+
+            if (exportBtns) exportBtns.style.visibility = 'hidden';
+            if (toast) toast.style.display = 'none';
+
+            html2canvas(document.body, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#F7F5EF',
+                logging: false,
+                scrollX: 0,
+                scrollY: 0,
+                onclone: (clonedDoc) => {
+                    const origCanvases = document.querySelectorAll('canvas');
+                    const cloneCanvases = clonedDoc.querySelectorAll('canvas');
+
+                    origCanvases.forEach((origCanv, i) => {
+                        const cloneCanv = cloneCanvases[i];
+                        if (cloneCanv && origCanv) {
+                            try {
+                                const dataUrl = origCanv.toDataURL('image/png', 1.0);
+                                const img = clonedDoc.createElement('img');
+                                img.src = dataUrl;
+                                img.style.width = (origCanv.offsetWidth || origCanv.width) + 'px';
+                                img.style.height = (origCanv.offsetHeight || origCanv.height) + 'px';
+                                img.style.display = 'block';
+                                img.style.margin = '0 auto';
+                                img.style.objectFit = 'contain';
+
+                                if (cloneCanv.parentNode) {
+                                    cloneCanv.parentNode.replaceChild(img, cloneCanv);
+                                }
+                            } catch (e) {
+                                console.warn('Canvas clone swap skipped:', e);
+                            }
+                        }
+                    });
+
+                    clonedDoc.body.style.backgroundColor = '#F7F5EF';
+                    clonedDoc.body.style.color = '#2B2D31';
+
+                    clonedDoc.querySelectorAll('.card').forEach(c => {
+                        c.style.backgroundColor = '#FFFFFF';
+                        c.style.border = '1px solid #E5E1D5';
+                        c.style.boxShadow = '0 2px 5px rgba(0,0,0,0.06)';
+                        c.style.opacity = '1';
+                    });
+
+                    clonedDoc.querySelectorAll('.card-title').forEach(t => {
+                        t.style.color = '#33373E';
+                        t.style.fontWeight = '700';
+                        t.style.opacity = '1';
+                    });
+
+                    clonedDoc.querySelectorAll('.kpi-value').forEach(v => {
+                        v.style.color = '#111827';
+                        v.style.fontWeight = '700';
+                        v.style.opacity = '1';
+                    });
+
+                    clonedDoc.querySelectorAll('.label, .t-label, th').forEach(l => {
+                        l.style.color = '#555963';
+                        l.style.fontWeight = '600';
+                        l.style.opacity = '1';
+                    });
+
+                    clonedDoc.querySelectorAll('.value, .t-value, td, h1, h2, h3, b, strong').forEach(v => {
+                        v.style.color = '#2B2D31';
+                        v.style.fontWeight = '700';
+                        v.style.opacity = '1';
+                    });
+
+                    clonedDoc.querySelectorAll('.kpi-delta.up, .gap-green').forEach(d => {
+                        d.style.color = '#10B981';
+                        d.style.fontWeight = '700';
+                        d.style.opacity = '1';
+                    });
+
+                    clonedDoc.querySelectorAll('.kpi-delta.down, .gap-red').forEach(d => {
+                        d.style.color = '#EF4444';
+                        d.style.fontWeight = '700';
+                        d.style.opacity = '1';
+                    });
+
+                    const btns = clonedDoc.querySelector('.export-actions');
+                    if (btns) btns.style.display = 'none';
+                    const tNotice = clonedDoc.querySelector('#toastNotice');
+                    if (tNotice) tNotice.style.display = 'none';
+                }
+            }).then(canvas => {
+                if (exportBtns) exportBtns.style.visibility = 'visible';
+
+                const link = document.createElement('a');
+                const now = new Date();
+                const dateStr = now.toISOString().split('T')[0];
+
+                link.download = `FKS_Food_OEE_Dashboard_HD_${dateStr}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showToast(`✨ Gambar HD Tajam & Kontras Tinggi berhasil di-download!`);
+                addLog('success', 'EXPORT', 'Screenshot HD kontras tinggi berhasil di-export ke format PNG.');
+            }).catch(err => {
+                if (exportBtns) exportBtns.style.visibility = 'visible';
+                console.error('Export image error:', err);
+                showToast(`⚠️ Gagal mengambil screenshot. Silakan coba lagi.`);
+            });
+        }
+
+        // =========================================================
+        // GAUGE CREATOR HELPER
+        // =========================================================
+        const gaugeInstances = {};
+        function createGauge(id, value, color) {
+            if (gaugeInstances[id]) {
+                gaugeInstances[id].data.datasets[0].data = [value, Math.max(0, 100 - value)];
+                gaugeInstances[id].data.datasets[0].backgroundColor[0] = color;
+                gaugeInstances[id].update('none');
+                return gaugeInstances[id];
+            }
+            const chartObj = new Chart(document.getElementById(id), {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [value, Math.max(0, 100 - value)],
+                        backgroundColor: [color, '#EFECE3'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '72%',
+                    circumference: 360,
+                    plugins: { tooltip: { enabled: false }, legend: { display: false } }
+                }
+            });
+            gaugeInstances[id] = chartObj;
+            return chartObj;
+        }
+
+        // Initial Gauges Overview Tab
+        createGauge('gOee', 82.4, '#10B981');
+        createGauge('gAvail', 91.1, '#E5A91A');
+        createGauge('gPerf', 90.4, '#33373E');
+        createGauge('gQual', 99.8, '#10B981');
+
+        // Initial Gauges Packaging Tab
+        createGauge('pkGOee', 85.8, '#10B981');
+        createGauge('pkGAvail', 92.1, '#E5A91A');
+        createGauge('pkGPerf', 93.4, '#33373E');
+        createGauge('pkGQual', 99.8, '#10B981');
+
+        // Overview Tab static charts
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const labels24 = months.concat(months);
+        const oee = [76.1, 78.5, 80.2, 81.5, 82.8, 82.4, 81.6, 82.0, 80.9, 81.8, 82.6, 83.0, 82.3, 83.1, 83.0, 83.3, 83.2, 83.6, 83.0, 83.2, 82.9, 82.3, 81.7, 81.0];
+        const avail = oee.map(v => Math.min(99, v + 10 + Math.random() * 2));
+        const perf = oee.map(v => Math.max(60, v - 1 + Math.random() * 2));
+        const qual = oee.map(v => 99.8);
+
+        new Chart(document.getElementById('lineTime'), {
+            type: 'line',
+            data: {
+                labels: labels24,
+                datasets: [
+                    { data: oee, borderColor: '#10B981', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+                    { data: avail, borderColor: '#E5A91A', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
+                    { data: perf, borderColor: '#33373E', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
+                    { data: qual, borderColor: '#555963', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#E8E4D8' } },
+                    x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 10 } } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('barMonth'), {
+            type: 'bar',
+            data: {
+                labels: labels24,
+                datasets: [{ data: oee, backgroundColor: '#E5A91A', borderRadius: 3 }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#E8E4D8' } },
+                    x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 9 } } }
+                }
+            }
+        });
+
+        function heatColor(v) {
+            if (v < 60) return '#EF4444';
+            if (v < 70) return '#F59E0B';
+            if (v < 80) return '#EAB308';
+            if (v < 90) return '#10B981';
+            return '#059669';
+        }
+        const heatRows = [
+            { year: '2025', vals: [76.1, 78.5, 80.2, 81.5, 82.8, 82.4, 81.6, 82.0, 80.9, 81.8, 82.6, 83.0] },
+            { year: '2026', vals: [82.3, 83.1, 83.0, 83.3, 83.2, 83.6, 83.0, 83.2, 82.9, 82.3, 81.7, 81.0] },
+        ];
+        let html = '<tr><th>Tahun</th>' + months.map(m => '<th>' + m + '</th>').join('') + '<th>Rata2</th></tr>';
+        heatRows.forEach(r => {
+            const avg = (r.vals.reduce((a, b) => a + b, 0) / r.vals.length).toFixed(1);
+            html += '<tr><td style="text-align:left;font-weight:600;">' + r.year + '</td>' +
+                r.vals.map(v => '<td><div class="heat-cell" style="background:' + heatColor(v) + '">' + v.toFixed(1) + '</div></td>').join('') +
+                '<td style="font-weight:600;">' + avg + '</td></tr>';
+        });
+        document.getElementById('heatmapTable').innerHTML = html;
+
+        // =========================================================
+        // PACKAGING REAL-TIME INTERACTIVE SIMULATION ENGINE
+        // =========================================================
+        let simRunning = true;
+        let isBreakdownMode = false;
+        let targetPpm = 120;
+        let currentPpm = 124;
+        let totalPackaged = 97600;
+        let totalGood = 97405;
+        let totalReject = 195;
+        let sealerTemp = 178.5;
+
+        const streamDataPoints = 20;
+        const timeLabels = Array.from({ length: streamDataPoints }, (_, i) => {
+            const d = new Date(Date.now() - (streamDataPoints - 1 - i) * 1500);
+            return d.toLocaleTimeString('id-ID', { minute: '2-digit', second: '2-digit' });
+        });
+        const speedStreamData = Array(streamDataPoints).fill(120);
+        const oeeStreamData = Array(streamDataPoints).fill(85.8);
+
+        const ctxStream = document.getElementById('liveChartStream').getContext('2d');
+        window.liveChartStreamObj = new Chart(ctxStream, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [
+                    {
+                        label: 'OEE (%)',
+                        data: oeeStreamData,
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16,185,129,0.08)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.35,
+                        yAxisID: 'yOee',
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Kecepatan (PPM)',
+                        data: speedStreamData,
+                        borderColor: '#E5A91A',
+                        borderWidth: 2,
+                        tension: 0.35,
+                        yAxisID: 'yPpm',
+                        pointRadius: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 400 },
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#E8E4D8' }, ticks: { font: { size: 10 } } },
+                    yOee: { type: 'linear', position: 'left', min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#E8E4D8' } },
+                    yPpm: { type: 'linear', position: 'right', min: 0, max: 200, ticks: { callback: v => v + ' PPM' }, grid: { display: false } }
+                }
+            }
+        });
+
+        function addLog(type, tag, message) {
+            const consoleEl = document.getElementById('logConsole');
+            const nowStr = '[' + new Date().toLocaleTimeString('id-ID', { hour12: false }) + ']';
+            const tagClass = type === 'info' ? 'tag-info' : (type === 'warn' ? 'tag-warn' : (type === 'err' ? 'tag-err' : 'tag-success'));
+
+            const div = document.createElement('div');
+            div.className = 'log-entry';
+            div.innerHTML = `<span class="log-time">${nowStr}</span><span class="log-tag ${tagClass}">${tag}</span><span>${message}</span>`;
+            consoleEl.appendChild(div);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function toggleSimulation() {
+            simRunning = !simRunning;
+            const btn = document.getElementById('btnToggleSim');
+            const statusBadge = document.getElementById('liveStatusText');
+
+            if (simRunning) {
+                btn.innerHTML = '⏸ Pause Live';
+                btn.className = 'btn btn-dark';
+                statusBadge.innerText = 'FKS Live Monitoring Aktif';
+                addLog('info', 'FKS-SYS', 'Monitoring live dilanjutkan.');
+            } else {
+                btn.innerHTML = '▶ Resume Live';
+                btn.className = 'btn btn-primary';
+                statusBadge.innerText = 'Monitoring Dijeda';
+                addLog('warn', 'FKS-SYS', 'Monitoring live dijeda oleh user.');
+            }
+        }
+
+        function updateTargetSpeed(val) {
+            const numVal = parseInt(val);
+            if (!isNaN(numVal) && numVal > 0) {
+                targetPpm = numVal;
+                const speedInput = document.getElementById('speedInput');
+                if (speedInput && parseInt(speedInput.value) !== numVal) {
+                    speedInput.value = numVal;
+                }
+                document.getElementById('livePpm').innerText = numVal + ' PPM';
+                addLog('info', 'SPEED', `Target nominal speed diubah ke ${numVal} PPM.`);
+            }
+        }
+
+        // Handler Filter Tanggal Historis
+        function onDateFilterChange(dateVal) {
+            if (!dateVal) return;
+            const d = new Date(dateVal);
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = d.toLocaleDateString('id-ID', options);
+
+            // Calculate deterministic pseudo-data for selected date
+            const dayNum = d.getDate();
+            const dayOee = +(80 + (dayNum % 7) * 1.2 - (dayNum % 3) * 0.8).toFixed(1);
+            const dayAvail = +(90 + (dayNum % 4) * 1.1).toFixed(1);
+            const dayPerf = +(91 + (dayNum % 5) * 0.9).toFixed(1);
+            const dayQual = 99.8;
+            const dayOutput = (1750000 + dayNum * 3200).toLocaleString('id-ID');
+
+            document.getElementById('ovOeeVal').innerText = dayOee + '%';
+            document.getElementById('ovAvailVal').innerText = dayAvail + '%';
+            document.getElementById('ovPerfVal').innerText = dayPerf + '%';
+            document.getElementById('ovQualVal').innerText = dayQual + '%';
+            document.getElementById('ovTotalCount').innerText = dayOutput;
+
+            createGauge('gOee', dayOee, dayOee >= 80 ? '#10B981' : '#E5A91A');
+            createGauge('gAvail', dayAvail, '#E5A91A');
+            createGauge('gPerf', dayPerf, '#33373E');
+            createGauge('gQual', dayQual, '#10B981');
+
+            showToast(`📅 Data OEE tanggal ${formattedDate} berhasil dimuat!`);
+            addLog('info', 'HISTORI', `User memuat data performa historis tanggal ${formattedDate}.`);
+        }
+
+        // Handler Filter Shift
+        function onShiftFilterChange(shiftVal) {
+            const shiftMap = {
+                'ALL': 'Semua Shift (1, 2, 3)',
+                '1': 'Shift 1 (06.30 – 14.30 WIB)',
+                '2': 'Shift 2 (14.30 – 22.30 WIB)',
+                '3': 'Shift 3 (22.30 – 06.30 WIB)'
+            };
+            const shiftText = shiftMap[shiftVal] || `Shift ${shiftVal}`;
+            showToast(`🕒 Filter Jam Kerja Diterapkan: ${shiftText}`);
+            addLog('info', 'SHIFT', `Filter data diubah ke ${shiftText}.`);
+        }
+
+        function triggerBreakdown() {
+            if (isBreakdownMode) return;
+            isBreakdownMode = true;
+
+            const statusPill = document.getElementById('statusPill');
+            const statusText = document.getElementById('statusPillText');
+            statusPill.className = 'line-status-pill breakdown';
+            statusText.innerText = 'STATUS: BREAKDOWN / STOPPAGE!';
+
+
+            addLog('err', 'ALERT', '⚠️ TERDETEKSI BREAKDOWN! Stasiun Hot Sealer Overheat (215°C). Lini melambat!');
+
+            setTimeout(() => {
+                isBreakdownMode = false;
+                statusPill.className = 'line-status-pill running';
+                statusText.innerText = 'STATUS: RUNNING NORMAL';
+
+
+                addLog('success', 'RECOVERY', '✅ Stasiun Hot Sealer kembali normal (178°C). Lini packaging kembali berjalan.');
+            }, 10000);
+        }
+
+        function resetCounters() {
+            totalPackaged = 0;
+            totalGood = 0;
+            totalReject = 0;
+            document.getElementById('liveTotalCount').innerText = '0';
+            document.getElementById('liveGoodCount').innerText = '0';
+            document.getElementById('liveRejectCount').innerText = '0 (0.0%)';
+            addLog('info', 'RESET', 'Shift counters berhasil di-reset ke 0.');
+        }
+
+        setInterval(() => {
+            if (!simRunning) return;
+
+            if (isBreakdownMode) {
+                currentPpm = Math.max(10, Math.floor(currentPpm * 0.5));
+                sealerTemp = Math.min(220, sealerTemp + 3.5);
+            } else {
+                const noise = (Math.random() - 0.5) * 6;
+                currentPpm = Math.round(targetPpm + noise);
+                sealerTemp = +(178 + (Math.random() - 0.5) * 1.5).toFixed(1);
+            }
+
+            const newUnits = Math.round(currentPpm / 40);
+            const isReject = Math.random() < (isBreakdownMode ? 0.25 : 0.008);
+            const rejectAdd = isReject ? 1 : 0;
+            const goodAdd = Math.max(0, newUnits - rejectAdd);
+
+            totalPackaged += newUnits;
+            totalGood += goodAdd;
+            totalReject += rejectAdd;
+
+            const rejectPct = totalPackaged > 0 ? ((totalReject / totalPackaged) * 100).toFixed(2) : '0.00';
+
+            const liveAvail = isBreakdownMode ? 62.4 : +(92 + (Math.random() - 0.5) * 1.2).toFixed(1);
+            const livePerf = +(Math.min(99, (currentPpm / 140) * 100)).toFixed(1);
+            const liveQual = +(100 - parseFloat(rejectPct)).toFixed(1);
+            const liveOee = +((liveAvail * livePerf * liveQual) / 10000).toFixed(1);
+
+            document.getElementById('livePpm').innerText = currentPpm + ' PPM';
+            document.getElementById('liveTotalCount').innerText = totalPackaged.toLocaleString('id-ID');
+            document.getElementById('liveGoodCount').innerText = totalGood.toLocaleString('id-ID');
+            document.getElementById('liveRejectCount').innerText = `${totalReject} (${rejectPct}%)`;
+
+            document.getElementById('pkOeeVal').innerText = liveOee + '%';
+            document.getElementById('pkAvailVal').innerText = liveAvail + '%';
+            document.getElementById('pkPerfVal').innerText = livePerf + '%';
+            document.getElementById('pkQualVal').innerText = liveQual + '%';
+
+            createGauge('pkGOee', liveOee, liveOee >= 80 ? '#10B981' : '#E5A91A');
+            createGauge('pkGAvail', liveAvail, '#E5A91A');
+            createGauge('pkGPerf', livePerf, '#33373E');
+            createGauge('pkGQual', liveQual, '#10B981');
+
+
+            const nowTime = new Date().toLocaleTimeString('id-ID', { minute: '2-digit', second: '2-digit' });
+            speedStreamData.shift();
+            speedStreamData.push(currentPpm);
+
+            oeeStreamData.shift();
+            oeeStreamData.push(liveOee);
+
+            window.liveChartStreamObj.data.labels.shift();
+            window.liveChartStreamObj.data.labels.push(nowTime);
+            window.liveChartStreamObj.update('none');
+
+        }, 1500);
+
+    </script>
+
+    <!-- =====================================================
+     NODE-RED / SQLite INTEGRATION
+     Fetch data dari Node-RED setiap 5 detik
+     Endpoint: http://localhost:1880/api/oee-data
+     ===================================================== -->
+    <script>
+        (function () {
+            // ── KONFIGURASI ─────────────────────────────────────────
+            const NODE_RED_URL = 'http://localhost:1880/api/oee';
+            const REFRESH_INTERVAL_MS = 5000; // refresh tiap 5 detik
+            // ────────────────────────────────────────────────────────
+
+            const statusBadge = document.createElement('div');
+            statusBadge.id = 'nr-status';
+            statusBadge.style.cssText = `
+    position:fixed; bottom:16px; right:16px; z-index:9999;
+    display:flex; align-items:center; gap:8px;
+    background:#1e2028; color:#fff; font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:12px; font-weight:600; padding:8px 14px;
+    border-radius:99px; box-shadow:0 4px 16px rgba(0,0,0,0.25);
+    transition: background 0.4s;
+  `;
+            statusBadge.innerHTML = `<span id="nr-dot" style="width:8px;height:8px;border-radius:50%;background:#6b7280;display:inline-block;"></span>
+    <span id="nr-text">Menghubungkan ke Node-RED...</span>`;
+            document.body.appendChild(statusBadge);
+
+            function setStatus(ok, msg) {
+                document.getElementById('nr-dot').style.background = ok ? '#10B981' : '#EF4444';
+                document.getElementById('nr-text').textContent = msg;
+                statusBadge.style.background = ok ? '#064e3b' : '#450a0a';
+            }
+
+            // Update gauge chart (Chart.js doughnut) jika ada
+            function updateGauge(canvasId, value) {
+                const chart = Chart.getChart(canvasId);
+                if (chart) {
+                    chart.data.datasets[0].data = [value, 100 - value];
+                    chart.update('none');
+                }
+            }
+
+            // Update elemen teks di dashboard
+            function applyData(data) {
+                const oee = parseFloat(data.oee ?? data.OEE ?? 0).toFixed(1);
+                const avail = parseFloat(data.availability ?? data.Availability ?? data.avail ?? 0).toFixed(1);
+                const perf = parseFloat(data.performance ?? data.Performance ?? data.perf ?? 0).toFixed(1);
+                const qual = parseFloat(data.quality ?? data.Quality ?? data.qual ?? 0).toFixed(1);
+                const ts = data.timestamp ?? data.Timestamp ?? new Date().toLocaleString('id-ID');
+
+                // Update teks KPI
+                const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val + '%'; };
+                set('ovOeeVal', oee);
+                set('ovAvailVal', avail);
+                set('ovPerfVal', perf);
+                set('ovQualVal', qual);
+
+                // Update gauge charts
+                updateGauge('gOee', parseFloat(oee));
+                updateGauge('gAvail', parseFloat(avail));
+                updateGauge('gPerf', parseFloat(perf));
+                updateGauge('gQual', parseFloat(qual));
+
+                // Update sumber data label
+                const srcEl = document.getElementById('activeFileName');
+                if (srcEl) srcEl.textContent = `Node-RED SQLite — ${new Date(ts).toLocaleString('id-ID')}`;
+
+                setStatus(true, `✓ Live dari Node-RED — ${new Date().toLocaleTimeString('id-ID')}`);
+            }
+
+            async function fetchFromNodeRed() {
+                try {
+                    const res = await fetch(NODE_RED_URL, { signal: AbortSignal.timeout(4000) });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const data = await res.json();
+                    // Jika API mengembalikan array, ambil record terbaru
+                    applyData(Array.isArray(data) ? data[0] : data);
+                } catch (err) {
+                    setStatus(false, `✗ Node-RED offline — ${err.message}`);
+                    console.warn('[Node-RED]', err.message);
+                }
+            }
+
+            // Mulai fetch setelah halaman siap
+            fetchFromNodeRed();
+            setInterval(fetchFromNodeRed, REFRESH_INTERVAL_MS);
+        })();
+    </script>
+</body>
+
+</html>
